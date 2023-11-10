@@ -1,7 +1,7 @@
 // components/Header.js
 import styled from 'styled-components';
-import HomeLogo from '../../assets/spotify-2.svg'; // Ajoutez le chemin de votre logo Home
-import SearchLogo from '../../assets/spotify-2.svg'; // Ajoutez le chemin de votre logo de recherche
+import HomeLogo from '../../assets/home.svg'; // Ajoutez le chemin de votre logo Home
+import SearchLogo from '../../assets/search.svg'; // Ajoutez le chemin de votre logo de recherche
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -22,6 +22,7 @@ const LogoContainer = styled.div`
 const Logo = styled.img`
   height: 30px; /* Ajustez la taille selon vos besoins */
   margin-bottom: 5px; /* Ajoutez une marge en bas pour l'espace */
+  margin-right: 10px; /* Ajoutez une marge à droite pour l'espace */
 `;
 
 const Header = () => {
