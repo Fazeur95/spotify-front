@@ -1,35 +1,40 @@
 // components/Header.js
-
 import styled from 'styled-components';
-import SpotifyLogo from '../../assets/spotify-1.svg';
+import HomeLogo from '../../assets/spotify-2.svg'; // Ajoutez le chemin de votre logo Home
+import SearchLogo from '../../assets/spotify-2.svg'; // Ajoutez le chemin de votre logo de recherche
 
 const HeaderContainer = styled.header`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column; /* Mettez les éléments en colonne */
+
   width: 100%;
   max-width: 800px;
-  margin-bottom: 20px;
-  padding: 20px 0;
+
+  padding: 20px 20px;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+
+  align-items: center;
 `;
 
 const Logo = styled.img`
-  height: 50px;
-`;
-
-const SearchInput = styled.input`
-  padding: 10px;
-  border-radius: 20px;
-  border: none;
-  width: 300px;
-  font-size: 16px;
+  height: 30px; /* Ajustez la taille selon vos besoins */
+  margin-bottom: 5px; /* Ajoutez une marge en bas pour l'espace */
 `;
 
 const Header = () => {
   return (
     <HeaderContainer>
-      <Logo src={SpotifyLogo} alt="Spotify Logo" />
-      <SearchInput type="text" placeholder="Rechercher" />
+      <LogoContainer>
+        <Logo src={HomeLogo} alt="Home Logo" />
+        <p>Accueil</p>
+      </LogoContainer>
+      <LogoContainer>
+        <Logo src={SearchLogo} alt="Search Logo" />
+        <p>Rechercher</p>
+      </LogoContainer>
     </HeaderContainer>
   );
 };
