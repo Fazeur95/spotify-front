@@ -17,6 +17,15 @@ const LogoContainer = styled.div`
   display: flex;
 
   align-items: center;
+  &:hover {
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    font-weight: bold;
+    & > img {
+      filter: brightness(2.5);
+      transform: scale(1.2);
+    }
+  }
 `;
 
 const Logo = styled.img`
