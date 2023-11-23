@@ -8,22 +8,8 @@ const PopularArtistsContainer = styled.div`
   max-width: 800px;
 `;
 
-const ArtistCard = styled.div`
-  margin: 10px;
-  padding: 10px;
-  background-color: #282828;
-  color: #fff;
-  border-radius: 8px;
-`;
-
 const PopularArtists = () => {
-  return (
-    <PopularArtistsContainer>
-      <h2>Popular Artists</h2>
-      <ArtistCard>Artist 1</ArtistCard>
-      <ArtistCard>Artist 2</ArtistCard>
-    </PopularArtistsContainer>
-  );
+  return <PopularArtistsContainer>Bonjour</PopularArtistsContainer>;
 };
 
 export default PopularArtists;
