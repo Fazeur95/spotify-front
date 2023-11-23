@@ -2,44 +2,40 @@ import {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search.svg';
+import ChevronRight from '../../assets/chevron-right.svg';
+import ChevronLeft from '../../assets/chevron-left.svg';
 
-const SearchBarContainer = styled.form`
-  display: flex;
-
-  margin-bottom: 20px;
-  background-color: #121212;
-  border-radius: 500px;
-  padding: 10px;
-`;
-
-const SearchInput = styled.input`
-  width: 300px;
-  height: 30px;
-  border: none;
-  background-color: #121212;
-  color: #b3b3b3;
-
-  padding: 5px;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const SearchButton = styled.button`
-  height: 30px;
-  border: none;
-  background-color: #121212;
-  color: #b3b3b3;
-  margin-left: 10px;
-  cursor: pointer;
-`;
-const Logo = styled.img`
-  height: 20px; /* Ajustez la taille selon vos besoins */
-`;
 const SearchInputContainer = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid white;
+  background-color: #121212;
+  border-radius: 500px;
+  padding: 15px;
+`;
+
+const SearchBarContainer = styled.div`
+  position: relative;
+  width: 600px;
+  display: flex;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 10px 30px;
+  border-radius: 20px;
+  border: 1px solid #282828;
+  background-color: #121212;
+  color: #b3b3b3;
+  &:focus {
+    outline: none;
+    border: 1px solid white;
+  }
+`;
+
+const SearchIconStyled = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 `;
 
 const SearchBar = ({onSearch}) => {
@@ -47,17 +43,15 @@ const SearchBar = ({onSearch}) => {
 
   const handleChange = event => {
     setSearchTerm(event.target.value);
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    onSearch(searchTerm);
+    onSearch(event.target.value);
   };
 
   return (
-    <SearchBarContainer onSubmit={handleSubmit}>
+    <SearchBarContainer onSubmit={e => e.preventDefault()}>
       <SearchInputContainer>
-        <Logo src={SearchIcon} alt="Search Icon" />
+        <SearchIconStyled src={ChevronLeft} alt="Chevron Left" />
+        <SearchIconStyled src={ChevronRight} alt="Chevron Right" />
+        <SearchIconStyled src={SearchIcon} alt="Search Icon" />
         <SearchInput
           type="text"
           placeholder="Que souhaitez-vous écouter ?"
@@ -65,7 +59,6 @@ const SearchBar = ({onSearch}) => {
           onChange={handleChange}
         />
       </SearchInputContainer>
-      <SearchButton type="submit">Rechercher</SearchButton>
     </SearchBarContainer>
   );
 };

@@ -4,10 +4,11 @@ import Header from '../../components/Header';
 import Playlists from '../../components/Playlists';
 import AudioPlayer from '../../components/AudioPlayer';
 import SearchBar from '../../components/SearchBar';
+import AllPlaylist from '../../components/AllPlaylist';
 
 const HomePageContainer = styled.div`
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 20% 80%;
   gap: 20px;
   max-width: 100wv;
   margin: 0 auto;
@@ -49,12 +50,12 @@ function HomePage() {
     <HomePageContainer>
       <LeftContainer>
         <Header />
-      </LeftContainer>
-      <LeftContainer2>
         <Playlists />
-      </LeftContainer2>
+      </LeftContainer>
+
       <RightContainer>
         <SearchBar />
+        <AllPlaylist />
       </RightContainer>
       <AudioPlayer />
     </HomePageContainer>

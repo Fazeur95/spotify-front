@@ -7,7 +7,7 @@ import PopularArtists from '../../components/PopularArtists';
 
 const HomePageContainer = styled.div`
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 20% 80%;
   gap: 20px;
   max-width: 100wv;
   margin: 0 auto;
