@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import Playlists from '../../components/Playlists';
 import AudioPlayer from '../../components/AudioPlayer';
 import PopularArtists from '../../components/PopularArtists';
+import {useState} from 'react';
 
 const HomePageContainer = styled.div`
   display: grid;
@@ -11,6 +12,7 @@ const HomePageContainer = styled.div`
   gap: 20px;
   max-width: 100wv;
   margin: 0 auto;
+  min-height: 100vh;
 `;
 
 const LeftContainer = styled.div`
@@ -45,6 +47,8 @@ const RightContainer = styled.div`
 `;
 
 function HomePage() {
+  const [currentTrack, setCurrentTrack] = useState(null);
+
   return (
     <HomePageContainer>
       <LeftContainer>
@@ -54,9 +58,17 @@ function HomePage() {
         <Playlists />
       </LeftContainer2>
       <RightContainer>
-        <PopularArtists />
+        <PopularArtists
+          currentTrack={currentTrack}
+          setCurrentTrack={setCurrentTrack}
+        />
       </RightContainer>
-      <AudioPlayer />
+      {currentTrack && (
+        <AudioPlayer
+          currentTrack={currentTrack}
+          setCurrentTrack={setCurrentTrack}
+        />
+      )}
     </HomePageContainer>
   );
 }

@@ -25,17 +25,6 @@ const LeftContainer = styled.div`
   overflow: hidden;
 `;
 
-const LeftContainer2 = styled.div`
-  grid-column: 1 / 2;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-radius: 10px;
-  border: 1px solid #121212;
-  background-color: #121212;
-  overflow: hidden;
-`;
-
 const RightContainer = styled.div`
   grid-column: 2 / 3;
   grid-row: 1 / 3;
@@ -50,6 +39,8 @@ function HomePage() {
     <HomePageContainer>
       <LeftContainer>
         <Header />
+      </LeftContainer>
+      <LeftContainer>
         <Playlists />
       </LeftContainer>
 

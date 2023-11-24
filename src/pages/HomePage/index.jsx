@@ -10,6 +10,7 @@ const HomePageContainer = styled.div`
   grid-template-columns: 20% 80%;
   gap: 20px;
   max-width: 100wv;
+
   margin: 0 auto;
 `;
 
