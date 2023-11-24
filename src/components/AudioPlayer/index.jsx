@@ -92,51 +92,54 @@ const VolumeContainer = styled.div`
 
 const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
   const [progress, setProgress] = useState(0);
+  const [volumeValue, setVolumeValue] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-  // const [currentTrack, setCurrentTrack] = useState(0); // [0, 1, 2]
-  const [currentIndex, setCurrentIndex] = useState(0); // [0, 1, 2
-  const [trackList, setTrackList] = useState([]); // [{}, {}, {}
-  const [audioUrlList, setAudioUrlList] = useState([]); // [url1, url2, url3
+  const [trackList, setTrackList] = useState([]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const audioRef = useRef();
 
   useEffect(() => {
-    fetch('http://localhost:6868/api/track/')
-      .then(response => response.json())
-      .then(data => {
+    fetch('http://localhost:6868/api/track').then(response =>
+      response.json().then(data => {
         setTrackList(data);
-      });
+      }),
+    );
   }, []);
 
+  useEffect(() => {
+    if (currentTrack) {
+      setCurrentTrackIndex(
+        trackList.findIndex(t => t._id === currentTrack._id),
+      );
+    }
+  }, [currentTrack, trackList]);
+
+  useEffect(() => {
+    if (currentTrack) {
+      audioRef.current.load();
+      handlePlay();
+    }
+  }, [currentTrack]);
+
   const handleNext = () => {
-    if (currentIndex < trackList.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setCurrentTrack(trackList[currentIndex]);
+    setIsPlaying(false);
+    if (currentTrackIndex < trackList.length - 1) {
+      setCurrentTrack(trackList[currentTrackIndex + 1]);
+    } else {
+      setCurrentTrack(trackList[0]);
     }
   };
 
   const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentTrack(trackList[currentIndex]);
-      setCurrentIndex(currentIndex - 1);
+    setIsPlaying(false);
+    if (currentTrackIndex > 0) {
+      setCurrentTrack(trackList[currentTrackIndex - 1]);
+    } else {
+      setCurrentTrack(trackList[trackList.length - 1]);
     }
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (audioRef.current) {
-        const value = Math.floor(
-          (audioRef.current.currentTime / totalDuration) * 100,
-        );
-        setProgress(value);
-        setCurrentTime(audioRef.current.currentTime);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [totalDuration]);
 
   const handleLoadedData = () => {
     setTotalDuration(audioRef.current.duration);
@@ -145,7 +148,6 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
   const handlePlay = () => {
     audioRef.current.play();
     setIsPlaying(true);
-    setIsClicked(true);
   };
 
   const handlePause = () => {
@@ -153,52 +155,48 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
     setIsPlaying(false);
   };
 
+  const handleShuffle = () => {
+    const newTrackList = [...trackList];
+    const currentTrackUrl = newTrackList.splice(currentTrackIndex, 1)[0];
+
+    const shuffledList = shuffle(newTrackList);
+
+    shuffledList.unshift(currentTrackUrl);
+    setTrackList(shuffledList);
+  };
+
+  const factor = 1000;
+
+  const handleTimeUpdate = () => {
+    const value = Math.floor(
+      (audioRef.current.currentTime / audioRef.current.duration) * factor,
+    );
+    setProgress(value);
+    setCurrentTime(audioRef.current.currentTime);
+
+    if (audioRef.current.ended) {
+      handleNext();
+    }
+  };
+
   const handleProgressChange = event => {
     const value = event.target.value;
     setProgress(value);
-    audioRef.current.currentTime = (value / 100) * totalDuration;
+    audioRef.current.currentTime = (value / factor) * audioRef.current.duration;
   };
 
   const handleVolumeChange = event => {
-    audioRef.current.volume = event.target.value / 100;
+    const value = event.target.value;
+    audioRef.current.volume = value;
+    localStorage.setItem('volume', value);
+    setVolumeValue(value);
   };
 
   useEffect(() => {
-    if (currentTrack) {
-      audioRef.current.load();
-      handlePlay();
+    if (localStorage.getItem('volume')) {
+      setVolumeValue(localStorage.getItem('volume'));
     }
-  }, [currentTrack, audioRef]);
-
-  useEffect(() => {
-    if (currentTrack) {
-      if (currentTrack._id !== trackList[currentIndex]?._id) {
-        setCurrentIndex(
-          trackList.findIndex(track => track._id === currentTrack._id),
-        );
-      }
-    }
-  }, [currentTrack, trackList, currentIndex]);
-
-  console.log(currentIndex);
-
-  useEffect(() => {
-    if (isPlaying) {
-      audioRef.current.play();
-    } else {
-      audioRef.current.pause();
-    }
-  }, [isPlaying]);
-
-  const handleShuffle = () => {
-    const newAudioUrlList = [...audioUrlList];
-    const currentTrackUrl = newAudioUrlList.splice(currentTrack, 1)[0];
-
-    const shuffledList = shuffle(newAudioUrlList);
-
-    shuffledList.unshift(currentTrackUrl);
-    setAudioUrlList(shuffledList);
-  };
+  }, []);
 
   return (
     <PlayerContainer>
@@ -228,7 +226,10 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
         </div>
       </Column>
       <Column>
-        <Player ref={audioRef} onLoadedData={handleLoadedData}>
+        <Player
+          ref={audioRef}
+          onLoadedData={handleLoadedData}
+          onTimeUpdate={handleTimeUpdate}>
           {currentTrack?.url && (
             <source
               src={
@@ -250,12 +251,16 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
             onClick={handlePrevious}
           />
           {!isPlaying ? (
-            <PlayButton onClick={handlePlay}>
-              <IconStyled src={PlayLogo} alt="Play Logo" />
+            <PlayButton>
+              <IconStyled src={PlayLogo} alt="Play Logo" onClick={handlePlay} />
             </PlayButton>
           ) : (
-            <PauseButton onClick={handlePause}>
-              <IconStyled src={PauseLogo} alt="Pause Logo" />
+            <PauseButton>
+              <IconStyled
+                src={PauseLogo}
+                alt="Pause Logo"
+                onClick={handlePause}
+              />
             </PauseButton>
           )}
           <IconStyled src={NextLogo} alt="Next Logo" onClick={handleNext} />
@@ -263,11 +268,18 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
         </ProgressContainer>
         <ProgressContainer>
           <Timer>
-            {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60)}
+            {Math.floor(currentTime / 60)
+              .toString()
+              .padStart(2, '0')}
+            :
+            {Math.floor(currentTime % 60)
+              .toString()
+              .padStart(2, '0')}
           </Timer>
+
           <ProgressBar
-            value={progress}
-            max="100"
+            value={progress || 0}
+            max={factor}
             onChange={handleProgressChange}
           />
           <Timer>
@@ -278,7 +290,13 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
       <Column>
         <VolumeContainer>
           <IconStyled src={VolumeLogo} alt="Volume Logo" />
-          <VolumeControl min="0" max="100" onChange={handleVolumeChange} />
+          <VolumeControl
+            min="0"
+            max="1"
+            step={0.01}
+            value={volumeValue}
+            onChange={handleVolumeChange}
+          />
         </VolumeContainer>
       </Column>
     </PlayerContainer>

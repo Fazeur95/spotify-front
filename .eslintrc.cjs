@@ -18,6 +18,11 @@ module.exports = {
       'warn',
       {allowConstantExport: true},
     ],
+    'react/prop-types': 0,
+    'react/react-in-jsx-scope': 0,
+    'no-unused-vars': 'warn',
+    'no-console': 'warn',
+    'react/no-unescaped-entities': 'off',
     'prettier/prettier': ['error', {endOfLine: 'auto'}], // Règles Prettier
   },
 };

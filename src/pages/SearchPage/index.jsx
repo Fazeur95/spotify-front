@@ -5,6 +5,7 @@ import Playlists from '../../components/Playlists';
 import AudioPlayer from '../../components/AudioPlayer';
 import SearchBar from '../../components/SearchBar';
 import AllPlaylist from '../../components/AllPlaylist';
+import PopularArtists from '../../components/PopularArtists';
 
 const HomePageContainer = styled.div`
   display: grid;
