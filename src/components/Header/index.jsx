@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 const HeaderContainer = styled.header`
   display: flex;
   flex-direction: column; /* Mettez les éléments en colonne */
-
+  background-color: #121212;
   width: 100%;
   max-width: 800px;
 

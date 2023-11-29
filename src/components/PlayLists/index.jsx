@@ -5,7 +5,8 @@ import LibraryLogo from '../../assets/library.svg'; // Ajoutez le chemin de votr
 const PlaylistsContainer = styled.div`
   display: flex;
   flex-direction: column; /* Mettez les éléments en colonne */
-
+  background-color: #121212;
+  border-radius: 10px;
   width: 100%;
   max-width: 800px;
 

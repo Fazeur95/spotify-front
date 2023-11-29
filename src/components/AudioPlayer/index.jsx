@@ -141,8 +141,14 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
     }
   };
 
-  const handleLoadedData = () => {
-    setTotalDuration(audioRef.current.duration);
+  const handleLoadedMetadata = () => {
+    let duration = audioRef.current.duration;
+    let minutes = Math.floor(duration / 60);
+    let seconds = Math.floor(duration % 60);
+    // Ajoute un zéro devant les secondes si elles sont inférieures à 10
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    setTotalDuration(`${minutes}:${seconds}`);
   };
 
   const handlePlay = () => {
@@ -228,7 +234,8 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
       <Column>
         <Player
           ref={audioRef}
-          onLoadedData={handleLoadedData}
+          onLoadedMetadata={handleLoadedMetadata}
+          // onLoadedData={handleLoadedData}
           onTimeUpdate={handleTimeUpdate}>
           {currentTrack?.url && (
             <source
@@ -282,9 +289,7 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
             max={factor}
             onChange={handleProgressChange}
           />
-          <Timer>
-            {Math.floor(totalDuration / 60)}:{Math.floor(totalDuration % 60)}
-          </Timer>
+          <Timer>{totalDuration}</Timer>
         </ProgressContainer>
       </Column>
       <Column>

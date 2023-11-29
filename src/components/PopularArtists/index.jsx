@@ -14,7 +14,7 @@ const TrackListContainer = styled.div`
 
 const TrackContainer = styled.div`
   display: grid;
-  grid-template-columns: 1.5fr 3fr 2fr 1fr 1fr;
+  grid-template-columns: 0.3fr 3fr 2fr 1fr 1fr;
   align-items: center;
   margin-bottom: 20px;
   border-bottom: 1px solid #282828;
@@ -22,9 +22,17 @@ const TrackContainer = styled.div`
 `;
 
 const ColumnTitle = styled.h2`
-  font-size: 12px;
+  font-size: 13px;
   color: #b3b3b3;
   margin-bottom: 10px;
+`;
+const ColumnTitlePlace = styled.h2`
+  font-size: 13px;
+  color: #b3b3b3;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const TrackImage = styled.img`
@@ -54,29 +62,59 @@ const TrackInfoArtist = styled.div`
 const TrackArtist = styled.h3`
   font-size: 14px;
   margin: 0;
+  color: #b3b3b3;
 `;
 
 const TrackAlbum = styled.p`
-  font-size: 16px;
+  font-size: 14px;
+  margin: 0;
+  color: #b3b3b3;
 `;
 
 const DurationIcon = styled.img`
   width: 16px;
   height: 16px;
 `;
+const TrackPlace = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #b3b3b3;
+  align-items: center;
+  padding-right: 10px;
+`;
+
+const getTotalDuration = tracks => {
+  let totalDurationInSeconds = 0;
+  tracks.forEach(track => {
+    const duration = Number(track.duration);
+    console.log(
+      `Durée de la piste : ${track.duration}, convertie en nombre : ${duration}`,
+    ); // Imprime la durée de chaque piste
+    if (!isNaN(duration)) {
+      totalDurationInSeconds += duration;
+    }
+  });
+  return totalDurationInSeconds;
+};
 
 const PopularArtists = ({setCurrentTrack}) => {
   const [tracks, setTracks] = useState([]);
+  const [totalDuration, setTotalDuration] = useState(0);
 
   useEffect(() => {
     fetch('http://localhost:6868/api/track')
       .then(response => response.json())
-      .then(data => setTracks(data));
+      .then(data => {
+        console.log(data);
+        setTracks(data);
+        setTotalDuration(getTotalDuration(data));
+      });
   }, []);
-
   return (
     <TrackListContainer>
       <TrackContainer>
+        <ColumnTitlePlace>#</ColumnTitlePlace>
         <ColumnTitle>Titre</ColumnTitle>
         <ColumnTitle>Album</ColumnTitle>
         <ColumnTitle>Date d'ajout</ColumnTitle>
@@ -86,6 +124,7 @@ const PopularArtists = ({setCurrentTrack}) => {
       </TrackContainer>
       {tracks.map((track, index) => (
         <TrackContainer key={index} onClick={() => setCurrentTrack(track)}>
+          <TrackPlace>{index + 1}</TrackPlace>
           <TrackInfo>
             <TrackImage
               src={
@@ -101,7 +140,7 @@ const PopularArtists = ({setCurrentTrack}) => {
           </TrackInfo>
           <TrackAlbum>{track.album}</TrackAlbum>
           <p>{track.addedDate}</p>
-          <p>{track.duration}</p>
+          <p>{totalDuration}</p>
         </TrackContainer>
       ))}
     </TrackListContainer>
