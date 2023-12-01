@@ -54,6 +54,7 @@ const AudioPlayer = () => {
   useEffect(() => {
     if (currentTrack) {
       audioRef.current.load();
+      audioRef.current.volume = volumeValue;
       handlePlay();
     }
   }, [currentTrack]);
@@ -247,9 +248,7 @@ const AudioPlayer = () => {
           onTimeUpdate={handleTimeUpdate}>
           {currentTrack?.url && (
             <source
-              src={
-                'http://localhost:6868/' + currentTrack?.url.replace('tmp/', '')
-              }
+              src={'http://localhost:6868/' + currentTrack?.url}
               type="audio/ogg"
             />
           )}

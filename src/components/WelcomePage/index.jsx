@@ -1,5 +1,40 @@
+import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
+const WelcomePage = () => {
+  const [albums, setAlbums] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:6868/api/album?populate=true')
+      .then(response => response.json())
+      .then(data => setAlbums(data));
+  }, []);
+
+  return (
+    <HomePageContainer>
+      <Title>Bonjour</Title>
+      <CardContainer>
+        {albums.map((album, index) => (
+          <Card
+            key={index}
+            onClick={() => {
+              console.log(album._id);
+            }}>
+            <CardImage
+              src={
+                'http://localhost:6868/' + album.imageUrl.replace('/tmp/', '')
+              }
+            />
+            <CardTitle>{album.name}</CardTitle>
+            <CardArtist>{album.artist.name}</CardArtist>
+          </Card>
+        ))}
+      </CardContainer>
+
+      {/* Le reste de votre code... */}
+    </HomePageContainer>
+  );
+};
 const HomePageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,6 +49,50 @@ const Title = styled.h1`
   font-size: 30px;
 
   font-weight: bold;
+`;
+const CardContainer = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const Card = styled.div`
+  width: 200px;
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: #121212;
+  &:hover {
+    cursor: pointer;
+    background-color: #282828;
+    transition: 0.3s ease-in-out;
+  }
+`;
+
+const CardTitle = styled.h2`
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  white-space: nowrap;
+  margin-top: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const CardArtist = styled.p`
+  color: grey;
+  font-size: 18px;
+  margin-top: 0;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const CardImage = styled.img`
+  width: 100%; /* Make sure the image takes the full width of its container */
+  height: auto; /* Maintain the aspect ratio of the image */
+  border-radius: 10px;
+  object-fit: cover;
+  object-position: center;
 `;
 
 const Section = styled.section``;
@@ -40,45 +119,4 @@ const Playlist = styled.div`
   background-color: #282828;
   padding: 20px;
 `;
-
-const HomePage = () => (
-  <HomePageContainer>
-    <Title>Bonjour</Title>
-
-    <Section>
-      <SectionTitle>Vos playlists</SectionTitle>
-      <Playlists>
-        {/* Remplacez "playlist1", "playlist2", etc. par vos propres playlists */}
-        <Playlist>playlist1</Playlist>
-        <Playlist>playlist2</Playlist>
-        <Playlist>playlist3</Playlist>
-      </Playlists>
-    </Section>
-
-    <Section>
-      <SectionTitle>Votre Rétrospective 2023</SectionTitle>
-      <p>Découvrez vos morceaux de l'année</p>
-    </Section>
-
-    <Section>
-      <SectionTitle>Conçu spécialement pour vous</SectionTitle>
-      <Playlists>
-        {/* Remplacez "playlist4", "playlist5", etc. par vos autres playlists */}
-        <Playlist>playlist4</Playlist>
-        <Playlist>playlist5</Playlist>
-        <Playlist>playlist6</Playlist>
-      </Playlists>
-    </Section>
-    <Section>
-      <SectionTitle>Ecouté</SectionTitle>
-      <Playlists>
-        {/* Remplacez "playlist4", "playlist5", etc. par vos autres playlists */}
-        <Playlist>playlist4</Playlist>
-        <Playlist>playlist5</Playlist>
-        <Playlist>playlist6</Playlist>
-      </Playlists>
-    </Section>
-  </HomePageContainer>
-);
-
-export default HomePage;
+export default WelcomePage;
