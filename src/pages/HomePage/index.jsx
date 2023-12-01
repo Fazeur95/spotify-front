@@ -2,6 +2,7 @@
 import styled from 'styled-components';
 import Header from '../../components/Header';
 import Playlists from '../../components/Playlists';
+import WelcomePage from '../../components/WelcomePage';
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -10,6 +11,7 @@ const HomePageContainer = styled.div`
 
 const LeftContainer = styled.div`
   width: 15%;
+  height: 100vh;
 
   padding: 10px;
 `;
@@ -19,6 +21,14 @@ const BorderContainer = styled.div`
   background-color: #121212;
   margin-bottom: 20px;
   overflow: hidden;
+`;
+const BorderContainer2 = styled.div`
+  border-radius: 10px;
+  border: 1px solid #121212;
+  background-color: #121212;
+  margin-bottom: 20px;
+  overflow: hidden;
+  height: 100vh;
 `;
 
 const RightContainer = styled.div`
@@ -34,12 +44,16 @@ function HomePage() {
         <BorderContainer>
           <Header />
         </BorderContainer>
-        <BorderContainer>
-          <Playlists />
-        </BorderContainer>
+        <BorderContainer2>
+          <BorderContainer>
+            <Playlists />
+          </BorderContainer>
+        </BorderContainer2>
       </LeftContainer>
 
-      <RightContainer></RightContainer>
+      <RightContainer>
+        <WelcomePage />
+      </RightContainer>
     </HomePageContainer>
   );
 }

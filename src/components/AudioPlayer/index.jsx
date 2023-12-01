@@ -1,14 +1,20 @@
-/* eslint-disable react/prop-types */
 import styled from 'styled-components';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useContext} from 'react';
+
 import PlayLogo from '../../assets/play.svg';
 import PauseLogo from '../../assets/pause.svg';
 import NextLogo from '../../assets/skip-forward.svg';
 import PreviousLogo from '../../assets/skip-back.svg';
 import ShuffleLogo from '../../assets/shuffle.svg';
+import isShuffleLogo from '../../assets/isShuffle.svg';
 import RepeatLogo from '../../assets/repeat.svg';
-import VolumeLogo from '../../assets/volume.svg';
+import VolumeLogoOff from '../../assets/volume-off.svg';
+import VolumeLogoMedium from '../../assets/volume-medium.svg';
+import VolumeLogoHigh from '../../assets/volume-high.svg';
+import isRepeatLogo from '../../assets/isRepeat.svg';
+
 import shuffle from 'just-shuffle';
+import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
 const Player = styled.audio`
   width: 100%;
@@ -90,14 +96,19 @@ const VolumeContainer = styled.div`
   align-self: center;
 `;
 
-const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
+const AudioPlayer = () => {
+  const {currentTrack, setCurrentTrack} = useContext(AudioPlayerContext);
+
   const [progress, setProgress] = useState(0);
   const [volumeValue, setVolumeValue] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [isRepeat, setIsRepeat] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [trackList, setTrackList] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [volumeLogo, setVolumeLogo] = useState(VolumeLogoMedium); // Utilisez le logo du volume
   const audioRef = useRef();
 
   useEffect(() => {
@@ -161,14 +172,25 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
     setIsPlaying(false);
   };
 
+  //Shuffle function
+
   const handleShuffle = () => {
-    const newTrackList = [...trackList];
-    const currentTrackUrl = newTrackList.splice(currentTrackIndex, 1)[0];
+    const shuffledTrackList = shuffle(trackList);
+    const currentTrackIndex = shuffledTrackList.findIndex(
+      t => t._id === currentTrack._id,
+    );
+    setTrackList(shuffledTrackList);
+    setCurrentTrackIndex(currentTrackIndex);
+    setIsShuffle(!isShuffle);
+  };
 
-    const shuffledList = shuffle(newTrackList);
+  //exportthe shuffle function to get the shuffleTracKList in the context
 
-    shuffledList.unshift(currentTrackUrl);
-    setTrackList(shuffledList);
+  const handleRepeat = () => {
+    const repeat = !audioRef.current.loop;
+    audioRef.current.loop = repeat;
+    // Mettez à jour l'état lorsque vous changez l'état de la répétition
+    setIsRepeat(repeat);
   };
 
   const factor = 1000;
@@ -196,6 +218,15 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
     audioRef.current.volume = value;
     localStorage.setItem('volume', value);
     setVolumeValue(value);
+
+    // Mettez à jour l'image du logo du volume en fonction de la valeur du volume
+    if (value <= 0) {
+      setVolumeLogo(VolumeLogoOff);
+    } else if (value > 0 && value <= 0.5) {
+      setVolumeLogo(VolumeLogoMedium);
+    } else if (value > 0.5) {
+      setVolumeLogo(VolumeLogoHigh);
+    }
   };
 
   useEffect(() => {
@@ -203,6 +234,10 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
       setVolumeValue(localStorage.getItem('volume'));
     }
   }, []);
+
+  if (!currentTrack) {
+    return null;
+  }
 
   return (
     <PlayerContainer>
@@ -248,7 +283,7 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
         </Player>
         <ProgressContainer>
           <IconStyled
-            src={ShuffleLogo}
+            src={isShuffle ? isShuffleLogo : ShuffleLogo}
             alt="Shuffle Logo"
             onClick={handleShuffle}
           />
@@ -271,7 +306,11 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
             </PauseButton>
           )}
           <IconStyled src={NextLogo} alt="Next Logo" onClick={handleNext} />
-          <IconStyled src={RepeatLogo} alt="Repeat Logo" />
+          <IconStyled
+            src={isRepeat ? isRepeatLogo : RepeatLogo}
+            alt="Repeat Logo"
+            onClick={handleRepeat}
+          />
         </ProgressContainer>
         <ProgressContainer>
           <Timer>
@@ -294,7 +333,7 @@ const AudioPlayer = ({currentTrack, setCurrentTrack}) => {
       </Column>
       <Column>
         <VolumeContainer>
-          <IconStyled src={VolumeLogo} alt="Volume Logo" />
+          <IconStyled src={volumeLogo} alt="Volume Logo" />
           <VolumeControl
             min="0"
             max="1"

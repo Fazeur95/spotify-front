@@ -28,6 +28,14 @@ const RightContainer = styled.div`
   border-radius: 10px;
   background-color: #121212;
 `;
+const BorderContainer2 = styled.div`
+  border-radius: 10px;
+  border: 1px solid #121212;
+  background-color: #121212;
+  margin-bottom: 20px;
+  overflow: hidden;
+  height: 100vh;
+`;
 
 function HomePage() {
   return (
@@ -36,9 +44,11 @@ function HomePage() {
         <BorderContainer>
           <Header />
         </BorderContainer>
-        <BorderContainer>
-          <Playlists />
-        </BorderContainer>
+        <BorderContainer2>
+          <BorderContainer>
+            <Playlists />
+          </BorderContainer>
+        </BorderContainer2>
       </LeftContainer>
 
       <RightContainer>

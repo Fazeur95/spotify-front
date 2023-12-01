@@ -4,6 +4,8 @@ import Playlists from '../../components/Playlists';
 import AudioPlayer from '../../components/AudioPlayer';
 import PopularArtists from '../../components/PopularArtists';
 import {useState} from 'react';
+import {useContext} from 'react';
+import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -28,9 +30,17 @@ const RightContainer = styled.div`
   border-radius: 10px;
   background-color: #121212;
 `;
+const BorderContainer2 = styled.div`
+  border-radius: 10px;
+  border: 1px solid #121212;
+  background-color: #121212;
+  margin-bottom: 20px;
+  overflow: hidden;
+  height: 100vh;
+`;
 
-function HomePage() {
-  const [currentTrack, setCurrentTrack] = useState(null);
+function LibraryPage() {
+  const {currentTrack, setCurrentTrack} = useContext(AudioPlayerContext);
 
   return (
     <HomePageContainer>
@@ -38,9 +48,11 @@ function HomePage() {
         <BorderContainer>
           <Header />
         </BorderContainer>
-        <BorderContainer>
-          <Playlists />
-        </BorderContainer>
+        <BorderContainer2>
+          <BorderContainer>
+            <Playlists />
+          </BorderContainer>
+        </BorderContainer2>
       </LeftContainer>
 
       <RightContainer>
@@ -49,14 +61,8 @@ function HomePage() {
           setCurrentTrack={setCurrentTrack}
         />
       </RightContainer>
-      {currentTrack && (
-        <AudioPlayer
-          currentTrack={currentTrack}
-          setCurrentTrack={setCurrentTrack}
-        />
-      )}
     </HomePageContainer>
   );
 }
 
-export default HomePage;
+export default LibraryPage;
