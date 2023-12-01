@@ -1,12 +1,12 @@
-import React from 'react';
 import styled from 'styled-components';
 
 const HomePageContainer = styled.div`
   display: flex;
   flex-direction: column;
-
+  //Mettre un dégradé de couleur
+  background: linear-gradient(180deg, #523a3a 0%, #121212 100%);
   height: 100vh; // Prend toute la hauteur de la page
-  padding: 10px;
+  padding: 20px;
 `;
 
 const Title = styled.h1`
@@ -18,11 +18,22 @@ const Title = styled.h1`
 
 const Section = styled.section``;
 
-const SectionTitle = styled.h2``;
+const SectionTitle = styled.h2`
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+`;
 
 const Playlists = styled.div`
-  display: flex;
+  //mettre en grid
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+  width: 100%;
+  align-items: center;
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Playlist = styled.div`
@@ -50,7 +61,16 @@ const HomePage = () => (
     </Section>
 
     <Section>
-      <SectionTitle>Autres playlists</SectionTitle>
+      <SectionTitle>Conçu spécialement pour vous</SectionTitle>
+      <Playlists>
+        {/* Remplacez "playlist4", "playlist5", etc. par vos autres playlists */}
+        <Playlist>playlist4</Playlist>
+        <Playlist>playlist5</Playlist>
+        <Playlist>playlist6</Playlist>
+      </Playlists>
+    </Section>
+    <Section>
+      <SectionTitle>Ecouté</SectionTitle>
       <Playlists>
         {/* Remplacez "playlist4", "playlist5", etc. par vos autres playlists */}
         <Playlist>playlist4</Playlist>

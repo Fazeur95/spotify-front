@@ -10,10 +10,10 @@ const HomePageContainer = styled.div`
 `;
 
 const LeftContainer = styled.div`
-  width: 15%;
+  width: 26%;
   height: 100vh;
 
-  padding: 10px;
+  padding: 8px;
 `;
 const BorderContainer = styled.div`
   border-radius: 10px;

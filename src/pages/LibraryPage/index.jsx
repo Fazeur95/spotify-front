@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import Header from '../../components/Header';
 import Playlists from '../../components/Playlists';
-import AudioPlayer from '../../components/AudioPlayer';
 import PopularArtists from '../../components/PopularArtists';
-import {useState} from 'react';
 import {useContext} from 'react';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 

@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import TimeLogo from '../../assets/clock-3.svg';
 
@@ -88,9 +87,7 @@ const getTotalDuration = tracks => {
   let totalDurationInSeconds = 0;
   tracks.forEach(track => {
     const duration = Number(track.duration);
-    console.log(
-      `Durée de la piste : ${track.duration}, convertie en nombre : ${duration}`,
-    ); // Imprime la durée de chaque piste
+
     if (!isNaN(duration)) {
       totalDurationInSeconds += duration;
     }
@@ -106,7 +103,6 @@ const PopularArtists = ({setCurrentTrack}) => {
     fetch('http://localhost:6868/api/track')
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         setTracks(data);
         setTotalDuration(getTotalDuration(data));
       });

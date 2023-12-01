@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import PopularArtists from '../PopularArtists';
 import SearchIcon from '../../assets/search.svg';
 import ChevronRight from '../../assets/chevron-right.svg';
 import ChevronLeft from '../../assets/chevron-left.svg';
