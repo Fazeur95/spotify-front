@@ -20,7 +20,6 @@ import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPl
 
 const AudioPlayer = () => {
   const {currentTrack, setCurrentTrack} = useContext(AudioPlayerContext);
-
   const [progress, setProgress] = useState(0);
   const [showThree, setShowThree] = useState(false); // Utilisez le logo du volume
   const [volumeValue, setVolumeValue] = useState(0.5);
@@ -170,13 +169,20 @@ const AudioPlayer = () => {
 
   const handleMaximizeClick = () => {
     if (!isMaximized) {
+      //L'image ne se raffraichit pas quand on change de musique
+
+      playerContainerRef.current.style.backgroundImage = `url(${currentTrack?.album?.imageUrl})`;
+
+      playerContainerRef.current.style.backgroundSize = 'cover';
       if (playerContainerRef.current.requestFullscreen) {
         playerContainerRef.current.requestFullscreen();
       } else if (playerContainerRef.current.mozRequestFullScreen) {
         /* Firefox */
+
         playerContainerRef.current.mozRequestFullScreen();
       } else if (playerContainerRef.current.webkitRequestFullscreen) {
         /* Chrome, Safari and Opera */
+
         playerContainerRef.current.webkitRequestFullscreen();
       } else if (playerContainerRef.current.msRequestFullscreen) {
         /* IE/Edge */
@@ -244,8 +250,9 @@ const AudioPlayer = () => {
               flexDirection: 'column',
               marginLeft: '10px',
             }}>
-            <Title>{currentTrack?.name}</Title>
-            <Title>{currentTrack?.album?.artist?.name}</Title>
+            <SongTitle>{currentTrack?.name}</SongTitle>
+
+            <ArtistName>{currentTrack?.album?.artist?.name}</ArtistName>
           </div>
         </div>
       </Column>
@@ -259,6 +266,7 @@ const AudioPlayer = () => {
             <source src={currentTrack?.url} type="audio/ogg" />
           )}
         </Player>
+
         <ProgressContainer>
           <IconStyled
             src={isShuffle ? isShuffleLogo : ShuffleLogo}
@@ -316,6 +324,9 @@ const AudioPlayer = () => {
           <VolumeControl
             min="0"
             max="1"
+            style={{
+              color: 'green',
+            }}
             step={0.01}
             value={volumeValue}
             onChange={handleVolumeChange}
@@ -327,9 +338,8 @@ const AudioPlayer = () => {
           />
 
           <FullScreenDiv ref={playerContainerRef}>
-            <PlayerContainer>
-              {backgroundComponent}
-              <Column>
+            <FullPlayerContainer>
+              <FullColumn>
                 <div
                   style={{
                     display: 'flex',
@@ -346,12 +356,12 @@ const AudioPlayer = () => {
                       flexDirection: 'column',
                       marginLeft: '10px',
                     }}>
-                    <Title>{currentTrack?.name}</Title>
-                    <Title>{currentTrack?.album?.artist?.name}</Title>
+                    <SongTitle>{currentTrack?.name}</SongTitle>
+                    <ArtistName>{currentTrack?.album?.artist?.name}</ArtistName>
                   </div>
                 </div>
-              </Column>
-              <Column>
+              </FullColumn>
+              <FullColumn>
                 <Player
                   ref={audioRef}
                   onLoadedMetadata={handleLoadedMetadata}
@@ -418,8 +428,8 @@ const AudioPlayer = () => {
                   />
                   <Timer>{totalDuration}</Timer>
                 </ProgressContainer>
-              </Column>
-              <Column>
+              </FullColumn>
+              <FullColumn>
                 <VolumeContainer>
                   <IconStyled
                     src={volumeLogo}
@@ -442,8 +452,8 @@ const AudioPlayer = () => {
                     />
                   )}
                 </VolumeContainer>
-              </Column>
-            </PlayerContainer>
+              </FullColumn>
+            </FullPlayerContainer>
           </FullScreenDiv>
         </VolumeContainer>
       </Column>
@@ -456,11 +466,25 @@ const Player = styled.audio`
   background-color: #282828;
   color: #b3b3b3;
 `;
-
+const ArtistName = styled.h1`
+  color: #b3b3b3;
+  font-size: 1.1em;
+`;
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
   background-color: black;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  padding: 0.5rem 1rem;
+  gap: 20px;
+  height: 8vh;
+  width: 100%;
+`;
+const FullPlayerContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  background-color: transparent;
   display: grid;
   grid-template-columns: 20% 60% 20%;
   padding: 0.5rem 1rem;
@@ -473,9 +497,13 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const FullColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const Title = styled.h1`
-  color: #b3b3b3;
+const SongTitle = styled.h1`
+  color: white;
   font-size: 1.2em;
 `;
 
@@ -488,11 +516,18 @@ const ProgressBar = styled.input.attrs({type: 'range'})`
 const PlayButton = styled.button`
   background: transparent;
   border: none;
+  outline: none;
+  &:active {
+    outline: none;
+  }
 `;
 
 const PauseButton = styled.button`
   background: transparent;
   border: none;
+  &:active {
+    outline: none;
+  }
 `;
 
 const Timer = styled.span`
@@ -504,6 +539,8 @@ const VolumeControl = styled.input.attrs({type: 'range'})`
   display: flex;
   align-items: center;
   justifycontent: center;
+  &:hover {
+  }
 `;
 
 const IconStyled = styled.img`
@@ -533,6 +570,8 @@ const VolumeContainer = styled.div`
   align-self: center;
 `;
 
-const FullScreenDiv = styled.div``;
+const FullScreenDiv = styled.div`
+  z-index: -5;
+`;
 
 export default AudioPlayer;

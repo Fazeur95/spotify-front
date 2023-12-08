@@ -16,7 +16,7 @@ const AlbumPage = () => {
   if (!album) return null;
 
   return (
-    <>
+    <AlbumPageContainer>
       <TrackContainer>
         <AlbumImageContainer>
           <AlbumImage src={album?.imageUrl} alt="Album" />
@@ -31,10 +31,14 @@ const AlbumPage = () => {
       </TrackContainer>
 
       <PopularArtists album={album} />
-    </>
+    </AlbumPageContainer>
   );
 };
-
+const AlbumPageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 7px;
+`;
 const AlbumImage = styled.img`
   width: 100%;
   height: 100%;
@@ -68,10 +72,9 @@ const ArtistName = styled(Link)`
 
 const TrackContainer = styled.div`
   display: flex;
-  justifyItems: center;
-  alignItems: center
-  //Make a linear gradient
   border-radius: 7px;
+  //Make a linear gradient
+
   background: linear-gradient(180deg, #523a3a 0%, #121212 100%);
   padding: 1rem;
 `;

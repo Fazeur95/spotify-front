@@ -3,18 +3,7 @@ import {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import TimeLogo from '../../assets/clock-3.svg';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
-
-const getTotalDuration = tracks => {
-  let totalDurationInSeconds = 0;
-  tracks.forEach(track => {
-    const duration = Number(track.duration);
-
-    if (!isNaN(duration)) {
-      totalDurationInSeconds += duration;
-    }
-  });
-  return totalDurationInSeconds;
-};
+import {Link} from 'react-router-dom';
 
 const PopularArtists = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
@@ -70,7 +59,9 @@ const PopularArtists = ({album}) => {
                 currentTrackName={currentTrack?.name}>
                 {track.name}
               </TrackName>
-              <TrackArtist>{album?.artist.name}</TrackArtist>
+              <TrackArtist to={`/artist/${album.artist._id}`}>
+                {album?.artist.name}
+              </TrackArtist>
             </TrackInfoArtist>
           </TrackInfo>
           <TrackAlbum>{album.name}</TrackAlbum>
@@ -83,6 +74,7 @@ const PopularArtists = ({album}) => {
 };
 const TrackListContainer = styled.div`
   display: flex;
+
   flex-direction: column;
   background-color: #121212;
   color: white;
@@ -139,10 +131,16 @@ const TrackInfoArtist = styled.div`
   margin-left: 10px;
 `;
 
-const TrackArtist = styled.h3`
+const TrackArtist = styled(Link)`
   font-size: 14px;
   margin: 0;
   color: #b3b3b3;
+
+  transition: 0.1s ease-in-out;
+  &:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
 `;
 
 const TrackAlbum = styled.p`
