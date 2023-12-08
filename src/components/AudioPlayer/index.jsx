@@ -13,7 +13,8 @@ import VolumeLogoMedium from '../../assets/volume-medium.svg';
 import VolumeLogoHigh from '../../assets/volume-high.svg';
 import isRepeatLogo from '../../assets/isRepeat.svg';
 import MaximizeLogo from '../../assets/maximize-2.svg';
-
+import Cover from '../../assets/cover.jpeg';
+import DiscoBall from '../ModelThreeJS';
 import shuffle from 'just-shuffle';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
@@ -21,6 +22,7 @@ const AudioPlayer = () => {
   const {currentTrack, setCurrentTrack} = useContext(AudioPlayerContext);
 
   const [progress, setProgress] = useState(0);
+  const [showThree, setShowThree] = useState(false); // Utilisez le logo du volume
   const [volumeValue, setVolumeValue] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
@@ -31,6 +33,7 @@ const AudioPlayer = () => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isMaximized, setIsMaximized] = useState(false); // Utilisez le logo du volume
   const [volumeLogo, setVolumeLogo] = useState(VolumeLogoMedium); // Utilisez le logo du volume
+  const [backgroundComponent, setBackgroundComponent] = useState(null);
   const audioRef = useRef();
 
   const playerContainerRef = useRef();
@@ -58,6 +61,16 @@ const AudioPlayer = () => {
       handlePlay();
     }
   }, [currentTrack]);
+
+  const MuteSound = () => {
+    if (audioRef.current.volume === 0) {
+      audioRef.current.volume = volumeValue;
+    } else {
+      audioRef.current.volume = 0;
+      setVolumeLogo(VolumeLogoOff);
+      setVolumeValue(audioRef.current.volume);
+    }
+  };
 
   const handleNext = () => {
     setIsPlaying(false);
@@ -90,6 +103,7 @@ const AudioPlayer = () => {
   const handlePlay = () => {
     audioRef.current.play();
     setIsPlaying(true);
+    console.log(currentTrack);
   };
 
   const handlePause = () => {
@@ -156,22 +170,17 @@ const AudioPlayer = () => {
 
   const handleMaximizeClick = () => {
     if (!isMaximized) {
-      if (playerContainerRef.current) {
-        playerContainerRef.current.style.backgroundImage =
-          'url("chemin_vers_votre_image.jpg")';
-        playerContainerRef.current.style.backgroundSize = 'cover';
-        if (playerContainerRef.current.requestFullscreen) {
-          playerContainerRef.current.requestFullscreen();
-        } else if (playerContainerRef.current.mozRequestFullScreen) {
-          /* Firefox */
-          playerContainerRef.current.mozRequestFullScreen();
-        } else if (playerContainerRef.current.webkitRequestFullscreen) {
-          /* Chrome, Safari and Opera */
-          playerContainerRef.current.webkitRequestFullscreen();
-        } else if (playerContainerRef.current.msRequestFullscreen) {
-          /* IE/Edge */
-          playerContainerRef.current.msRequestFullscreen();
-        }
+      if (playerContainerRef.current.requestFullscreen) {
+        playerContainerRef.current.requestFullscreen();
+      } else if (playerContainerRef.current.mozRequestFullScreen) {
+        /* Firefox */
+        playerContainerRef.current.mozRequestFullScreen();
+      } else if (playerContainerRef.current.webkitRequestFullscreen) {
+        /* Chrome, Safari and Opera */
+        playerContainerRef.current.webkitRequestFullscreen();
+      } else if (playerContainerRef.current.msRequestFullscreen) {
+        /* IE/Edge */
+        playerContainerRef.current.msRequestFullscreen();
       }
       setIsMaximized(true);
     }
@@ -226,7 +235,7 @@ const AudioPlayer = () => {
           }}>
           <img
             style={{width: '80px', height: '80px'}}
-            src={currentTrack?.imageUrl || ''}
+            src={currentTrack?.album?.imageUrl || ''}
             alt="track"
           />
           <div
@@ -236,7 +245,7 @@ const AudioPlayer = () => {
               marginLeft: '10px',
             }}>
             <Title>{currentTrack?.name}</Title>
-            <Title>{currentTrack?.artist}</Title>
+            <Title>{currentTrack?.album?.artist?.name}</Title>
           </div>
         </div>
       </Column>
@@ -247,10 +256,7 @@ const AudioPlayer = () => {
           // onLoadedData={handleLoadedData}
           onTimeUpdate={handleTimeUpdate}>
           {currentTrack?.url && (
-            <source
-              src={'http://localhost:6868/' + currentTrack?.url}
-              type="audio/ogg"
-            />
+            <source src={currentTrack?.url} type="audio/ogg" />
           )}
         </Player>
         <ProgressContainer>
@@ -303,9 +309,10 @@ const AudioPlayer = () => {
           <Timer>{totalDuration}</Timer>
         </ProgressContainer>
       </Column>
+
       <Column>
         <VolumeContainer>
-          <IconStyled src={volumeLogo} alt="Volume Logo" />
+          <IconStyled src={volumeLogo} onClick={MuteSound} alt="Volume Logo" />
           <VolumeControl
             min="0"
             max="1"
@@ -321,6 +328,7 @@ const AudioPlayer = () => {
 
           <FullScreenDiv ref={playerContainerRef}>
             <PlayerContainer>
+              {backgroundComponent}
               <Column>
                 <div
                   style={{
@@ -329,7 +337,7 @@ const AudioPlayer = () => {
                   }}>
                   <img
                     style={{width: '80px', height: '80px'}}
-                    src={currentTrack?.imageUrl || ''}
+                    src={currentTrack?.album?.imageUrl || ''}
                     alt="track"
                   />
                   <div
@@ -339,7 +347,7 @@ const AudioPlayer = () => {
                       marginLeft: '10px',
                     }}>
                     <Title>{currentTrack?.name}</Title>
-                    <Title>{currentTrack?.artist}</Title>
+                    <Title>{currentTrack?.album?.artist?.name}</Title>
                   </div>
                 </div>
               </Column>
@@ -350,13 +358,7 @@ const AudioPlayer = () => {
                   // onLoadedData={handleLoadedData}
                   onTimeUpdate={handleTimeUpdate}>
                   {currentTrack?.url && (
-                    <source
-                      src={
-                        'http://localhost:6868/' +
-                        currentTrack?.url.replace('tmp/', '')
-                      }
-                      type="audio/ogg"
-                    />
+                    <source src={currentTrack.url} type="audio/ogg" />
                   )}
                 </Player>
                 <ProgressContainer>
@@ -419,7 +421,11 @@ const AudioPlayer = () => {
               </Column>
               <Column>
                 <VolumeContainer>
-                  <IconStyled src={volumeLogo} alt="Volume Logo" />
+                  <IconStyled
+                    src={volumeLogo}
+                    onClick={MuteSound}
+                    alt="Volume Logo"
+                  />
                   <VolumeControl
                     min="0"
                     max="1"
@@ -504,6 +510,8 @@ const IconStyled = styled.img`
   width: 30px;
   height: 30px;
   padding: 0 10px;
+  background: transparent;
+  border: none;
   cursor: pointer;
   &&:hover {
     opacity: 0.5;

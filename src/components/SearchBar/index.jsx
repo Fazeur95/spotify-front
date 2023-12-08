@@ -2,8 +2,6 @@ import {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search.svg';
-import ChevronRight from '../../assets/chevron-right.svg';
-import ChevronLeft from '../../assets/chevron-left.svg';
 
 const SearchInputContainer = styled.div`
   display: flex;
@@ -15,6 +13,7 @@ const SearchInputContainer = styled.div`
 
 const SearchBarContainer = styled.div`
   position: relative;
+  display: flex;
   width: 600px;
   display: flex;
 `;
@@ -49,8 +48,6 @@ const SearchBar = ({onSearch}) => {
   return (
     <SearchBarContainer onSubmit={e => e.preventDefault()}>
       <SearchInputContainer>
-        <SearchIconStyled src={ChevronLeft} alt="Chevron Left" />
-        <SearchIconStyled src={ChevronRight} alt="Chevron Right" />
         <SearchIconStyled src={SearchIcon} alt="Search Icon" />
         <SearchInput
           type="text"

@@ -4,58 +4,10 @@ import Header from '../../components/Header';
 import Playlists from '../../components/Playlists';
 import WelcomePage from '../../components/WelcomePage';
 
-const HomePageContainer = styled.div`
-  display: flex;
-  height: 100vh; // Prend toute la hauteur de la page
-`;
-
-const LeftContainer = styled.div`
-  width: 26%;
-  height: 100vh;
-
-  padding: 8px;
-`;
-const BorderContainer = styled.div`
-  border-radius: 10px;
-  border: 1px solid #121212;
-  background-color: #121212;
-  margin-bottom: 20px;
-  overflow: hidden;
-`;
-const BorderContainer2 = styled.div`
-  border-radius: 10px;
-  border: 1px solid #121212;
-  background-color: #121212;
-  margin-bottom: 20px;
-  overflow: hidden;
-  height: 100vh;
-`;
-
-const RightContainer = styled.div`
-  width: 90%;
-  border-radius: 10px;
-  background-color: #121212;
-`;
+import NavigationButtons from '../../components/NavigationButtons';
 
 function HomePage() {
-  return (
-    <HomePageContainer>
-      <LeftContainer>
-        <BorderContainer>
-          <Header />
-        </BorderContainer>
-        <BorderContainer2>
-          <BorderContainer>
-            <Playlists />
-          </BorderContainer>
-        </BorderContainer2>
-      </LeftContainer>
-
-      <RightContainer>
-        <WelcomePage />
-      </RightContainer>
-    </HomePageContainer>
-  );
+  return <WelcomePage />;
 }
 
 export default HomePage;

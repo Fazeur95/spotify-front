@@ -1,8 +1,11 @@
 import {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 
 const WelcomePage = () => {
   const [albums, setAlbums] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:6868/api/album?populate=true')
@@ -13,25 +16,21 @@ const WelcomePage = () => {
   return (
     <HomePageContainer>
       <Title>Bonjour</Title>
-      <CardContainer>
-        {albums.map((album, index) => (
-          <Card
-            key={index}
-            onClick={() => {
-              console.log(album._id);
-            }}>
-            <CardImage
-              src={
-                'http://localhost:6868/' + album.imageUrl.replace('/tmp/', '')
-              }
-            />
-            <CardTitle>{album.name}</CardTitle>
-            <CardArtist>{album.artist.name}</CardArtist>
-          </Card>
-        ))}
-      </CardContainer>
-
-      {/* Le reste de votre code... */}
+      <Section>
+        <CardContainer>
+          {albums.map((album, index) => (
+            <Card
+              key={index}
+              onClick={() => {
+                navigate(`/album/${album._id}`);
+              }}>
+              <CardImage src={album.imageUrl} />
+              <CardTitle>{album.name}</CardTitle>
+              <CardArtist>{album.artist.name}</CardArtist>
+            </Card>
+          ))}
+        </CardContainer>
+      </Section>
     </HomePageContainer>
   );
 };
@@ -39,6 +38,7 @@ const HomePageContainer = styled.div`
   display: flex;
   flex-direction: column;
   //Mettre un dégradé de couleur
+  border-radius: 7px;
   background: linear-gradient(180deg, #523a3a 0%, #121212 100%);
   height: 100vh; // Prend toute la hauteur de la page
   padding: 20px;
@@ -56,7 +56,7 @@ const CardContainer = styled.div`
 `;
 
 const Card = styled.div`
-  width: 200px;
+  width: 170px;
   border-radius: 10px;
   padding: 1rem;
   background-color: #121212;

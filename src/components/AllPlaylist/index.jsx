@@ -4,11 +4,6 @@ const AllPlaylist = () => {
   return (
     <PopularArtistsContainer>
       <Title>Parcourir tout</Title>
-      <GenreColumn>
-        <GenreCard>
-          <GenreImage />
-        </GenreCard>
-      </GenreColumn>
     </PopularArtistsContainer>
   );
 };
@@ -17,6 +12,7 @@ const PopularArtistsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 20px;
 `;
 
 const Title = styled.h1`

@@ -8,10 +8,12 @@ import {
 import SearchPage from '../src/pages/SearchPage';
 import LibraryPage from '../src/pages/LibraryPage';
 import HomePage from '../src/pages/HomePage';
-import AudioPlayer from './components/AudioPlayer';
 import AlbumPage from './pages/AlbumPage';
-
+import NavigationButtons from './components/NavigationButtons';
+import Layout from './components/SideBarLayout'; // Importez votre composant Layout
+import AudioPlayer from './components/AudioPlayer';
 import AudioPlayerProvider from './utils/context/AudioPlayerContext/AudioPlayerContext';
+import ArtistPage from './pages/ArtistPage';
 
 const App = () => {
   return (
@@ -19,10 +21,26 @@ const App = () => {
       <AudioPlayerProvider>
         <Router>
           <Routes>
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/library" element={<LibraryPage />} />
-            <Route path="/album/:id" element={<AlbumPage />} />
-            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/search"
+              element={<Layout rightComponent={<SearchPage />} />}
+            />
+            <Route
+              path="/library"
+              element={<Layout rightComponent={<LibraryPage />} />}
+            />
+            <Route
+              path="/album/:id"
+              element={<Layout rightComponent={<AlbumPage />} />}
+            />
+            <Route
+              path="/artist/:id"
+              element={<Layout rightComponent={<ArtistPage />} />}
+            />
+            <Route
+              path="/"
+              element={<Layout rightComponent={<HomePage />} />}
+            />
             <Route path="*" element={<Navigate replace to="/" />} />
           </Routes>
         </Router>
