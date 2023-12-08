@@ -21,7 +21,11 @@ const ArtistPage = () => {
         .then(response => response.json())
         .then(data => {
           data?.tracks?.map(track => {
-            setTracks(prevData => [...prevData, track]);
+            setTracks(prevData => {
+              if (prevData?.find(t => t._id === track._id)) return prevData;
+
+              return [...prevData, track];
+            });
           });
         });
     }
@@ -35,9 +39,6 @@ const ArtistPage = () => {
       <MonthlyListeners> auditeurs mensuels</MonthlyListeners>
 
       <SongList>
-        {artist.albums?.map((album, index) => (
-          <li key={index}>{album.name}</li>
-        ))}
         {tracks?.map((track, index) => (
           <li key={index}>{track.name}</li>
         ))}
@@ -47,19 +48,38 @@ const ArtistPage = () => {
 };
 
 const ArtistContainer = styled.div`
-  /* Ajoutez vos styles ici */
+  display: flex;
+  flex-direction: column;
+
+  background-color: #121212;
+  color: white;
+  padding: 20px;
 `;
 
 const ArtistName = styled.h1`
-  /* Ajoutez vos styles ici */
+  font-size: 2.5em;
+  text-align: center;
+  color: #1db954; /* Couleur verte Spotify */
 `;
 
 const MonthlyListeners = styled.p`
-  /* Ajoutez vos styles ici */
+  font-size: 1.2em;
+  text-align: center;
+  color: #b3b3b3; /* Gris clair */
 `;
 
 const SongList = styled.ul`
-  /* Ajoutez vos styles ici */
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+
+  & > li {
+    padding: 10px 0;
+    border-bottom: 1px solid #282828; /* Ligne de séparation entre les chansons */
+    font-size: 1.1em;
+  }
 `;
 
 export default ArtistPage;
