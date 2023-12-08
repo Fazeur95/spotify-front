@@ -4,10 +4,13 @@ import styled from 'styled-components';
 import TimeLogo from '../../assets/clock-3.svg';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 import {Link} from 'react-router-dom';
+import PlayButton from '../../assets/play.svg';
+import MusicGif from '../../assets/music.gif';
 
 const PopularArtists = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [tracks, setTracks] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [totalDuration, setTotalDuration] = useState(0);
 
   console.log(album);
@@ -36,31 +39,33 @@ const PopularArtists = ({album}) => {
       </TrackContainer>
 
       {tracks.map((track, index) => (
-        <TrackContainer
-          key={index}
-          onClick={() =>
-            setCurrentTrack({
-              ...track,
-              album: {
-                imageUrl: album.imageUrl,
-                name: album.name,
-                artist: {
-                  name: album.artist.name,
+        <TrackContainer key={index}>
+          <TrackPlace
+            onClick={() => {
+              setCurrentTrack({
+                ...track,
+                album: {
+                  imageUrl: album.imageUrl,
+                  name: album.name,
+                  artist: {
+                    name: album.artist.name,
+                  },
                 },
-              },
-            })
-          }>
-          <TrackPlace>{index + 1}</TrackPlace>
+              });
+              setIsPlaying(true); // Ajoutez cette ligne pour définir l'état de lecture sur vrai
+            }}>
+            {index + 1}
+          </TrackPlace>
           <TrackInfo>
-            {/* <TrackImage src={album?.imageUrl} alt="Track" /> */}
             <TrackInfoArtist>
               <TrackName
                 name={track.name}
                 currentTrackName={currentTrack?.name}>
                 {track.name}
               </TrackName>
+
               <TrackArtist to={`/artist/${album.artist._id}`}>
-                {album?.artist.name}
+                {album.artist.name}
               </TrackArtist>
             </TrackInfoArtist>
           </TrackInfo>
@@ -118,7 +123,7 @@ const TrackInfo = styled.div`
 
 const TrackName = styled.h2`
   font-size: 16px;
-  cursor: pointer;
+
   margin: 0;
   transition: 0.1s ease-in-out;
   color: ${({name, currentTrackName}) =>
@@ -160,5 +165,16 @@ const TrackPlace = styled.div`
   color: #b3b3b3;
   align-items: center;
   padding-right: 10px;
+  background-image: none;
+
+  &:hover {
+    background-image: url(${PlayButton});
+    background-repeat: no-repeat;
+    background-position: center;
+    //Don't show the text while hovering
+    color: transparent;
+
+    cursor: pointer;
+  }
 `;
 export default PopularArtists;
