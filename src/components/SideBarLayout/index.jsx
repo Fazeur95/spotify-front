@@ -58,7 +58,7 @@ const BorderContainer2 = styled.div`
   border-radius: 10px;
   border: 1px solid #121212;
   background-color: #121212;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   overflow: hidden;
   width: 100%;
   height: 95vh;
@@ -67,8 +67,8 @@ const BorderContainer2 = styled.div`
 
 const MainContent = styled.div`
   width: 80%;
-  margin-left: 22%;
-  padding: 8px;
+  margin-left: 21%;
+  padding: 7px 10px;
   position: relative;
 
   color: #ffffff; // Added to make text white

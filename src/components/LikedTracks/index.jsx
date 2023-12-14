@@ -7,8 +7,9 @@ import {Link} from 'react-router-dom';
 import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
+import LikedCover from '../../assets/likedCover.webp';
 
-const PopularArtists = ({album}) => {
+const LikedPlaylist = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -19,10 +20,10 @@ const PopularArtists = ({album}) => {
   console.log(album);
 
   useEffect(() => {
-    if (!album.tracks.length === 0) return;
-
-    setTracks([...album.tracks]);
-    // setTotalDuration(getTotalDuration(album.map(album => album.tracks).flat()));
+    if (album && album.tracks && album.tracks.length !== 0) {
+      setTracks([...album.tracks]);
+      // setTotalDuration(getTotalDuration(album.map(album => album.tracks).flat()));
+    }
   }, [album]);
 
   const likeTrack = track => {
@@ -46,29 +47,40 @@ const PopularArtists = ({album}) => {
 
   return (
     <TrackListContainer>
-      <TrackContainer>
-        <ColumnTitlePlace>#</ColumnTitlePlace>
-        <ColumnTitle>Titre</ColumnTitle>
-        <ColumnTitle>Album</ColumnTitle>
-        <ColumnTitle>Date d'ajout</ColumnTitle>
-        <ColumnTitle></ColumnTitle>
-      </TrackContainer>
+      <CoverContainer>
+        <TrackContainer>
+          <AlbumImageContainer>
+            <AlbumImage src={LikedCover} alt="Album" />
+          </AlbumImageContainer>
+          <AlbumContainer>
+            <TrackTitle>Playlist</TrackTitle>
 
-      {tracks.map((track, index) => (
+            <LikedTitle>Titres Likés</LikedTitle>
+          </AlbumContainer>
+        </TrackContainer>
+        <TrackContainerBorder>
+          <ColumnTitlePlace>#</ColumnTitlePlace>
+          <ColumnTitle>Titre</ColumnTitle>
+          <ColumnTitle>Album</ColumnTitle>
+          <ColumnTitle>Date d'ajout</ColumnTitle>
+        </TrackContainerBorder>
+      </CoverContainer>
+
+      {likedTracks.map((track, index) => (
         <TrackContainer key={index}>
           <TrackPlace
             onClick={() => {
               setCurrentTrack({
                 ...track,
                 album: {
-                  imageUrl: album.imageUrl,
-                  name: album.name,
+                  imageUrl: track.album.imageUrl,
+                  name: track.album.name,
                   artist: {
-                    name: album.artist.name,
+                    name: track.album.artist.name,
                   },
                 },
               });
-              setIsPlaying(true); // Ajoutez cette ligne pour définir l'état de lecture sur vrai
+              setIsPlaying(true);
             }}>
             {index + 1}
           </TrackPlace>
@@ -80,12 +92,12 @@ const PopularArtists = ({album}) => {
                 {track.name}
               </TrackName>
 
-              <TrackArtist to={`/artist/${album.artist._id}`}>
-                {album.artist.name}
+              <TrackArtist to={`/artist/${track.album.artist._id}`}>
+                {track.album.artist.name}
               </TrackArtist>
             </TrackInfoArtist>
           </TrackInfo>
-          <TrackAlbum>{album.name}</TrackAlbum>
+          <TrackAlbum>{track.album.name}</TrackAlbum>
           <p>{track.addedDate}</p>
           <LikedLogo
             src={
@@ -93,33 +105,68 @@ const PopularArtists = ({album}) => {
                 ? HearthFilledLogo
                 : HearthLogo
             }
-            onClick={() =>
-              likeTrack({
-                ...track,
-                album: {
-                  imageUrl: album.imageUrl,
-                  name: album.name,
-                  artist: {
-                    name: album.artist.name,
-                  },
-                },
-              })
-            }
             alt="Like Logo"
+            onClick={() => likeTrack(track)}
           />
         </TrackContainer>
       ))}
     </TrackListContainer>
   );
 };
+
+const AlbumImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+`;
+const CoverContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 7px;
+  padding: 20px;
+  background: linear-gradient(180deg, #804dfe -99%, #121212 100%);
+`;
+const AlbumImageContainer = styled.div`
+  margin-top: 50px;
+  height: 232px;
+  width: 232px;
+  margin-bottom: 20px;
+`;
+
+const AlbumTitle = styled.h2`
+  font-size: 3.5em;
+  margin-bottom: 10px;
+  margin-top: 0px;
+  line-height: 1;
+`;
+
+const LikedTitle = styled.h2`
+  font-size: 4em;
+  margin-top: 0.5rem;
+  color: inherit; 
+  text-decoration: 
+  &:hover {
+    color: grey;
+    text-decoration: underline;
+  }
+`;
+const AlbumContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20px;
+`;
+
+const TrackTitle = styled.p`
+  margin-bottom: 0px;
+`;
 const TrackListContainer = styled.div`
   display: flex;
-  height: 100vh;
-  overflow-y: auto;
+
   flex-direction: column;
   background-color: #121212;
   color: white;
-  padding: 20px;
 `;
 const LikedLogo = styled.img`
   width: 16px;
@@ -131,6 +178,14 @@ const LikedLogo = styled.img`
 `;
 
 const TrackContainer = styled.div`
+  display: grid;
+  grid-template-columns: 0.3fr 3fr 2fr 1fr 1fr;
+  align-items: center;
+  margin-bottom: 20px;
+
+  padding: 10px 0;
+`;
+const TrackContainerBorder = styled.div`
   display: grid;
   grid-template-columns: 0.3fr 3fr 2fr 1fr 1fr;
   align-items: center;
@@ -148,9 +203,9 @@ const ColumnTitle = styled.h2`
 const ColumnTitlePlace = styled.h2`
   font-size: 13px;
   color: #b3b3b3;
-  margin-bottom: 10px;
+
   display: flex;
-  justify-content: center;
+
   align-items: center;
 `;
 
@@ -215,4 +270,4 @@ const TrackPlace = styled.div`
     cursor: pointer;
   }
 `;
-export default PopularArtists;
+export default LikedPlaylist;

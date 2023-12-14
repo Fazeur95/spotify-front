@@ -11,6 +11,7 @@ const ArtistPageContent = ({
   persistantRandomNumber,
 }) => {
   const navigate = useNavigate();
+  console.log(tracks);
 
   return (
     <ArtistPageContainer>
@@ -37,20 +38,9 @@ const ArtistPageContent = ({
                 <PlayButtonLogo
                   src={PlayButton}
                   alt="Play"
-                  onClick={() =>
-                    setCurrentTrack({
-                      ...track,
-                      album: {
-                        imageUrl: artist.imageUrl,
-                        name: artist.name,
-                        artist: {
-                          name: artist.name,
-                        },
-                      },
-                    })
-                  }
+                  onClick={() => setCurrentTrack(track)}
                 />
-                <TrackImage src={artist.imageUrl} alt="Album" />
+                <TrackImage src={track.album.imageUrl} alt="Album" />
                 <TrackName isPlaying={isPlaying}>{track.name}</TrackName>
                 <TrackListener>{persistantRandomNumber}</TrackListener>
               </SongList>

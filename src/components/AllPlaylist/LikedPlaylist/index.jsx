@@ -8,7 +8,7 @@ import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
 
-const PopularArtists = ({album}) => {
+const LikedPlaylist = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -54,21 +54,21 @@ const PopularArtists = ({album}) => {
         <ColumnTitle></ColumnTitle>
       </TrackContainer>
 
-      {tracks.map((track, index) => (
+      {likedTracks.map((track, index) => (
         <TrackContainer key={index}>
           <TrackPlace
             onClick={() => {
               setCurrentTrack({
                 ...track,
                 album: {
-                  imageUrl: album.imageUrl,
-                  name: album.name,
+                  imageUrl: track.album.imageUrl,
+                  name: track.album.name,
                   artist: {
-                    name: album.artist.name,
+                    name: track.album.artist.name,
                   },
                 },
               });
-              setIsPlaying(true); // Ajoutez cette ligne pour définir l'état de lecture sur vrai
+              setIsPlaying(true);
             }}>
             {index + 1}
           </TrackPlace>
@@ -80,12 +80,12 @@ const PopularArtists = ({album}) => {
                 {track.name}
               </TrackName>
 
-              <TrackArtist to={`/artist/${album.artist._id}`}>
-                {album.artist.name}
+              <TrackArtist to={`/artist/${track.album.artist._id}`}>
+                {track.album.artist.name}
               </TrackArtist>
             </TrackInfoArtist>
           </TrackInfo>
-          <TrackAlbum>{album.name}</TrackAlbum>
+          <TrackAlbum>{track.album.name}</TrackAlbum>
           <p>{track.addedDate}</p>
           <LikedLogo
             src={
@@ -97,10 +97,10 @@ const PopularArtists = ({album}) => {
               likeTrack({
                 ...track,
                 album: {
-                  imageUrl: album.imageUrl,
-                  name: album.name,
+                  imageUrl: track.album.imageUrl,
+                  name: track.album.name,
                   artist: {
-                    name: album.artist.name,
+                    name: track.album.artist.name,
                   },
                 },
               })
@@ -114,8 +114,7 @@ const PopularArtists = ({album}) => {
 };
 const TrackListContainer = styled.div`
   display: flex;
-  height: 100vh;
-  overflow-y: auto;
+
   flex-direction: column;
   background-color: #121212;
   color: white;
@@ -215,4 +214,4 @@ const TrackPlace = styled.div`
     cursor: pointer;
   }
 `;
-export default PopularArtists;
+export default LikedPlaylist;

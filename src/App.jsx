@@ -5,9 +5,10 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import SearchPage from '../src/pages/SearchPage';
-import LibraryPage from '../src/pages/LibraryPage';
-import HomePage from '../src/pages/HomePage';
+import SearchPage from './pages/SearchPage';
+import LibraryPage from './pages/LibraryPage';
+import HomePage from './pages/HomePage';
+import FavoritePage from './pages/FavoritePage';
 import AlbumPage from './pages/AlbumPage';
 import Layout from './components/SideBarLayout'; // Importez votre composant Layout
 import AudioPlayer from './components/AudioPlayer';
@@ -35,6 +36,10 @@ const App = () => {
             <Route
               path="/artist/:id"
               element={<Layout rightComponent={<ArtistPage />} />}
+            />
+            <Route
+              path="/favorite"
+              element={<Layout rightComponent={<FavoritePage />} />}
             />
             <Route
               path="/"

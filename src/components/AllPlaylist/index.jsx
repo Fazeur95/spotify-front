@@ -55,62 +55,79 @@ const AllPlaylist = () => {
           onChange={handleSearch}
         />
       </Header>
-      <div>
-        <Title>Parcourir tout</Title>
 
+      <Main>
         <Content>
-          {searchTerm && (
-            <Results>
-              <Section>
-                <SectionTitle>Chansons</SectionTitle>
-                <TrackList>
-                  {filteredData.tracks.map(track => (
-                    <Track
-                      key={track._id}
-                      onClick={() => {
-                        setCurrentTrack(track);
-                        setCurrentPlayingTrack(track);
-                      }}>
-                      <TrackImage
-                        src={track.album?.imageUrl || track.imageUrl}
-                      />
-                      <TrackName>{track.name}</TrackName>
-                      <TrackArtist>{track.artist}</TrackArtist>
-                    </Track>
-                  ))}
-                </TrackList>
-              </Section>
-              <Section>
-                <SectionTitle>Albums</SectionTitle>
-                <AlbumList>
-                  {filteredData.albums.map(album => (
-                    <StyledLink to={`/album/${album._id}`} key={album._id}>
-                      <Album key={album._id}>
-                        <AlbumImage src={album.imageUrl} />
-                        <AlbumName>{album.name}</AlbumName>
-                        <AlbumArtist>{album.artist.name}</AlbumArtist>
-                      </Album>
-                    </StyledLink>
-                  ))}
-                </AlbumList>
-              </Section>
-              <Section>
-                <SectionTitle>Artistes</SectionTitle>
-                <ArtistList>
-                  {filteredData.artists.map(artist => (
-                    <StyledLink to={`/artist/${artist._id}`} key={artist._id}>
-                      <Artist key={artist._id}>
-                        <ArtistImage src={artist.imageUrl} />
-                        <ArtistName>{artist.name}</ArtistName>
-                      </Artist>
-                    </StyledLink>
-                  ))}
-                </ArtistList>
-              </Section>
-            </Results>
-          )}
+          {searchTerm &&
+            (filteredData.tracks.length > 0 ||
+              filteredData.albums.length > 0 ||
+              filteredData.artists.length > 0) && (
+              <Results>
+                {filteredData.tracks.length > 0 && (
+                  <Section>
+                    <SectionTitle>Chansons</SectionTitle>
+                    <TrackList>
+                      {filteredData.tracks.map(track => (
+                        <Track
+                          key={track._id}
+                          onClick={() => {
+                            setCurrentTrack(track);
+                            setCurrentPlayingTrack(track);
+                          }}>
+                          <TrackImage
+                            src={track.album?.imageUrl || track.imageUrl}
+                            alt='Pochette de l"album'
+                          />
+                          <TrackName>{track.name}</TrackName>
+                          <TrackArtist>{track.artist}</TrackArtist>
+                        </Track>
+                      ))}
+                    </TrackList>
+                  </Section>
+                )}
+                {filteredData.albums.length > 0 && (
+                  <Section>
+                    <SectionTitle>Albums</SectionTitle>
+                    <AlbumList>
+                      {filteredData.albums.map(album => (
+                        <StyledLink to={`/album/${album._id}`} key={album._id}>
+                          <Album key={album._id}>
+                            <AlbumImage
+                              src={album.imageUrl}
+                              alt="Album Cover"
+                            />
+                            <AlbumName>{album.name}</AlbumName>
+                            <AlbumArtist>{album.artist.name}</AlbumArtist>
+                          </Album>
+                        </StyledLink>
+                      ))}
+                    </AlbumList>
+                  </Section>
+                )}
+                {filteredData.artists.length > 0 && (
+                  <Section>
+                    <SectionTitle>Artistes</SectionTitle>
+                    <ArtistList>
+                      {filteredData.artists.map(artist => (
+                        <StyledLink
+                          to={`/artist/${artist._id}`}
+                          key={artist._id}>
+                          <Artist key={artist._id}>
+                            <ArtistImage
+                              src={artist.imageUrl}
+                              alt="Album Cover"
+                            />
+                            <ArtistName>{artist.name}</ArtistName>
+                          </Artist>
+                        </StyledLink>
+                      ))}
+                    </ArtistList>
+                  </Section>
+                )}
+              </Results>
+            )}
         </Content>
-      </div>
+      </Main>
     </Container>
   );
 };
@@ -122,39 +139,38 @@ const Container = styled.div`
   background-color: #121212;
   color: white;
   font-family: Arial, sans-serif;
+  border-radius: 7px;
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: white;
 `;
 const Title = styled.h1`
-  font-size: 2em;
-  margin-left: 20px;
-  margin-top: 20px;
+  font-size: 1.5em;
+  margin-left: 2rem;
+  margin-top: 2rem;
 `;
+
 const Header = styled.header`
   display: flex;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #282828;
-`;
-
-const Logo = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  margin-right: 20px;
+  padding: 1rem;
 `;
 
 const SearchBar = styled.input`
-  width: 300px;
-  padding: 10px;
+  width: 80%;
+  padding: 1rem;
   border: none;
   margin-left: 8%;
   border-radius: 20px;
   outline: none;
   background-color: #282828;
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
+
+  @media (min-width: 768px) {
+    width: 300px;
+  }
 `;
 
 const Main = styled.main`
@@ -169,6 +185,9 @@ const Content = styled.div`
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  width: 100%;
+  background-color: #121212;
+  overflow-x: hidden;
 `;
 
 const Results = styled.div`
@@ -181,6 +200,11 @@ const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  justify-content: space-between;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
 `;
 
 const SectionTitle = styled.h2`
@@ -269,16 +293,21 @@ const Artist = styled.div`
 `;
 
 const ArtistImage = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: auto;
   object-fit: cover;
   border-radius: 50%;
+
+  @media (min-width: 768px) {
+    width: 150px;
+    height: 150px;
+  }
 `;
 
 const ArtistName = styled.p`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 1rem;
 `;
 
 export default AllPlaylist;

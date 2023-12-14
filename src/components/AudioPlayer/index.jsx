@@ -14,6 +14,7 @@ import VolumeLogoHigh from '../../assets/volume-high.svg';
 import isRepeatLogo from '../../assets/isRepeat.svg';
 import MaximizeLogo from '../../assets/maximize-2.svg';
 import shuffle from 'just-shuffle';
+
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
 const AudioPlayer = () => {
@@ -99,7 +100,6 @@ const AudioPlayer = () => {
   const handlePlay = () => {
     audioRef.current.play();
     setIsPlaying(true);
-    console.log(currentTrack);
   };
 
   const handlePause = () => {
@@ -238,7 +238,7 @@ const AudioPlayer = () => {
           }}>
           <img
             style={{width: '80px', height: '80px'}}
-            src={currentTrack?.album?.imageUrl || ''}
+            src={currentTrack.album.imageUrl || currentTrack.album}
             alt="track"
           />
           <div

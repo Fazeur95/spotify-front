@@ -27,7 +27,19 @@ const ArtistPage = ({album}) => {
             setTracks(prevData => {
               if (prevData?.find(t => t._id === track._id)) return prevData;
 
-              return [...prevData, track];
+              return [
+                ...prevData,
+                {
+                  ...track,
+                  album: {
+                    imageUrl: data.imageUrl,
+                    name: data.name,
+                    artist: {
+                      name: artist.name,
+                    },
+                  },
+                },
+              ];
             });
           });
         });

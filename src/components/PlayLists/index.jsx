@@ -1,43 +1,110 @@
+import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
-import LibraryLogo from '../../assets/library.svg'; // Ajoutez le chemin de votre logo Library
+import LibraryLogo from '../../assets/library.svg';
+import LikedCover from '../../assets/likedCover.webp';
 
 const Playlists = () => {
+  const [likedTracks, setLikedTracks] = useState(
+    JSON.parse(localStorage.getItem('likedTracks')) || [],
+  );
   return (
     <PlaylistsContainer>
       <LogoContainer>
         <Logo src={LibraryLogo} alt="Library Logo" />
-        <p>Bibliothèque</p>
+        <LogoTitle>Bibliothèque</LogoTitle>
       </LogoContainer>
+      <LikedTracksContainer>
+        <LinkStyled to="/favorite">
+          <StyledCover src={LikedCover} alt="Liked Cover" />
+          <TitleContainer>
+            <Title>Titre Likés</Title>
+            <SubTitle>{likedTracks.length} morceaux</SubTitle>
+          </TitleContainer>
+        </LinkStyled>
+      </LikedTracksContainer>
     </PlaylistsContainer>
   );
 };
+
 const PlaylistsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1px 10px 1px 10px;
+  padding: 8px;
   width: 100%;
   height: 100%;
+  background-color: #121212;
+  color: #fff;
 `;
 
 const LogoContainer = styled.div`
   display: flex;
-  padding: 1px 10px 1px 10px;
   align-items: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+
   &:hover {
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
     font-weight: bold;
+
     & > img {
       filter: brightness(2.5);
       transform: scale(1.2);
     }
   }
 `;
+
 const Logo = styled.img`
-  height: 30px; /* Ajustez la taille selon vos besoins */
-  margin-bottom: 5px; /* Ajoutez une marge en bas pour l'espace */
-  margin-right: 10px; /* Ajoutez une marge à droite pour l'espace */
+  height: 30px;
+  margin-right: 10px;
+`;
+
+const LogoTitle = styled.h2`
+  font-size: 1.2em;
+`;
+
+const LikedTracksContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
+const LinkStyled = styled(Link)`
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  &:hover {
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    font-weight: bold;
+    color: #fff;
+  }
+`;
+
+const StyledCover = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 10px;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Title = styled.h3`
+  font-size: 1em;
+  margin: 0;
+`;
+
+const SubTitle = styled.h4`
+  font-size: 1em;
+  margin: 0;
+  color: #b3b3b3;
 `;
 
 export default Playlists;

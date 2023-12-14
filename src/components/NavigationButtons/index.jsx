@@ -20,8 +20,12 @@ function NavigationButtons() {
 
   return (
     <ButtonContainer>
-      <IconButton src={PreviousButton} onClick={handlePreviousClick} />
-      <IconButton src={NextButton} onClick={handleNextClick} />
+      <IconButton
+        src={PreviousButton}
+        onClick={handlePreviousClick}
+        alt="Previous"
+      />
+      <IconButton src={NextButton} onClick={handleNextClick} alt="Next" />
     </ButtonContainer>
   );
 }
