@@ -13,15 +13,12 @@ import VolumeLogoMedium from '../../assets/volume-medium.svg';
 import VolumeLogoHigh from '../../assets/volume-high.svg';
 import isRepeatLogo from '../../assets/isRepeat.svg';
 import MaximizeLogo from '../../assets/maximize-2.svg';
-import Cover from '../../assets/cover.jpeg';
-import DiscoBall from '../ModelThreeJS';
 import shuffle from 'just-shuffle';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
 const AudioPlayer = () => {
   const {currentTrack, setCurrentTrack} = useContext(AudioPlayerContext);
   const [progress, setProgress] = useState(0);
-  const [showThree, setShowThree] = useState(false); // Utilisez le logo du volume
   const [volumeValue, setVolumeValue] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);

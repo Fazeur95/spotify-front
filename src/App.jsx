@@ -9,7 +9,6 @@ import SearchPage from '../src/pages/SearchPage';
 import LibraryPage from '../src/pages/LibraryPage';
 import HomePage from '../src/pages/HomePage';
 import AlbumPage from './pages/AlbumPage';
-import NavigationButtons from './components/NavigationButtons';
 import Layout from './components/SideBarLayout'; // Importez votre composant Layout
 import AudioPlayer from './components/AudioPlayer';
 import AudioPlayerProvider from './utils/context/AudioPlayerContext/AudioPlayerContext';
@@ -44,6 +43,7 @@ const App = () => {
             <Route path="*" element={<Navigate replace to="/" />} />
           </Routes>
         </Router>
+
         <AudioPlayer />
       </AudioPlayerProvider>
     </>
