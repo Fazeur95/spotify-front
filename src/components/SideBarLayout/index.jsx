@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Playlists from '../PlayLists';
 import Header from '../Header';
 import NavigationButtons from '../NavigationButtons';
+import PlaylistComponent from '../CreatePlaylist';
 
 function Layout({rightComponent}) {
   return (
@@ -12,6 +13,7 @@ function Layout({rightComponent}) {
           <Header />
         </BorderContainer>
         <BorderContainer2>
+          <PlaylistComponent />
           <Playlists />
         </BorderContainer2>
       </Sidebar>

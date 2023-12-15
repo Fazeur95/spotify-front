@@ -15,6 +15,7 @@ import AudioPlayer from './components/AudioPlayer';
 import AudioPlayerProvider from './utils/context/AudioPlayerContext/AudioPlayerContext';
 import ArtistPage from './pages/ArtistPage';
 import PlaylistPage from './pages/PlaylistPage';
+import CustomPlaylist from './pages/CustomPlaylist';
 
 const App = () => {
   return (
@@ -49,6 +50,10 @@ const App = () => {
             <Route
               path="/"
               element={<Layout rightComponent={<HomePage />} />}
+            />
+            <Route
+              path="/customPlaylist"
+              element={<Layout rightComponent={<CustomPlaylist />} />}
             />
             <Route path="*" element={<Navigate replace to="/" />} />
           </Routes>

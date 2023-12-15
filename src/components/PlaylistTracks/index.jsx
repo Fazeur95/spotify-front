@@ -49,7 +49,7 @@ const PopularArtists = ({playlist}) => {
       <TrackContainer>
         <ColumnTitlePlace>#</ColumnTitlePlace>
         <ColumnTitle>Titre</ColumnTitle>
-        <ColumnTitle>playlist</ColumnTitle>
+        <ColumnTitle>Album</ColumnTitle>
         <ColumnTitle>Date d'ajout</ColumnTitle>
         <ColumnTitle></ColumnTitle>
       </TrackContainer>

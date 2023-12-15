@@ -67,16 +67,15 @@ const WelcomePage = () => {
           {playlists.map((playlist, index) => (
             <Card
               key={index}
-              // onClick={() => {
-              //   navigate(`/album/${playlist._id}`);
-            >
+              onClick={() => {
+                navigate(`/playlist/${playlist._id}`);
+              }}>
               <CardImage src={playlist.imageUrl} alt="Card Image" />
               <CardTitle>{playlist.name}</CardTitle>
             </Card>
           ))}
         </CardContainer>
       </Section>
-      <Section></Section>
     </HomePageContainer>
   );
 };
