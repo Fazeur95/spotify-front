@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {useParams, Link} from 'react-router-dom';
 import styled from 'styled-components';
 import PlaylistTracks from '../../components/PlaylistTracks';
+import EditPlaylistComponent from '../ModifyAlbum';
+import AddTracksToPlaylist from '../AddSongToPlaylist';
 
 const PlaylistAlbum = ({id}) => {
   const [playlist, setPlaylists] = useState(null);
@@ -25,6 +27,8 @@ const PlaylistAlbum = ({id}) => {
           <AlbumTitle>{playlist.name}</AlbumTitle>
         </AlbumContainer>
       </TrackContainer>
+      <EditPlaylistComponent playlistId={id} />
+      <AddTracksToPlaylist playlistId={id} />
       <PlaylistTracks playlist={playlist} />
     </AlbumPageContainer>
   );
