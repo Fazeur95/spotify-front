@@ -1,6 +1,7 @@
 import {useEffect, useState, useContext} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import PlayButton from '../../assets/play.svg';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
 const AllPlaylist = () => {
@@ -21,7 +22,12 @@ const AllPlaylist = () => {
         const artistsResponse = await fetch('http://localhost:6868/api/artist');
         const artists = await artistsResponse.json();
 
-        setData({tracks, albums, artists});
+        const playlistResponse = await fetch(
+          'http://localhost:6868/api/playlist',
+        );
+        const playlists = await playlistResponse.json();
+
+        setData({tracks, albums, artists, playlists});
       } catch (error) {
         console.error('Erreur lors de la récupération des données:', error);
       }
@@ -34,17 +40,21 @@ const AllPlaylist = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredData = {
-    tracks: data.tracks.filter(track =>
+  const filteredData = data && {
+    tracks: data.tracks?.filter(track =>
       track.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ),
-    albums: data.albums.filter(album =>
+    albums: data.albums?.filter(album =>
       album.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ),
-    artists: data.artists.filter(artist =>
+    artists: data.artists?.filter(artist =>
       artist.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ),
+    playlists: data.playlists?.filter(playlist =>
+      playlist.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
   };
+  console.log(filteredData.tracks);
 
   return (
     <Container>
@@ -59,29 +69,42 @@ const AllPlaylist = () => {
       <Main>
         <Content>
           {searchTerm &&
-            (filteredData.tracks.length > 0 ||
-              filteredData.albums.length > 0 ||
-              filteredData.artists.length > 0) && (
+            filteredData &&
+            (filteredData.tracks?.length > 0 ||
+              filteredData.playlists?.length > 0 ||
+              filteredData.albums?.length > 0 ||
+              filteredData.artists?.length > 0) && (
               <Results>
-                {filteredData.tracks.length > 0 && (
+                {filteredData.tracks?.length > 0 && (
                   <Section>
-                    <SectionTitle>Chansons</SectionTitle>
+                    <SectionTitle>Titres</SectionTitle>
                     <TrackList>
-                      {filteredData.tracks.map(track => (
-                        <Track
-                          key={track._id}
-                          onClick={() => {
-                            setCurrentTrack(track);
-                            setCurrentPlayingTrack(track);
-                          }}>
-                          <TrackImage
-                            src={track.album?.imageUrl || track.imageUrl}
-                            alt='Pochette de l"album'
-                          />
-                          <TrackName>{track.name}</TrackName>
-                          <TrackArtist>{track.artist}</TrackArtist>
-                        </Track>
-                      ))}
+                      {filteredData.tracks.map(track => {
+                        const isPlaying =
+                          currentTrack && currentTrack._id === track._id; // Vérifier si la piste est en cours de lecture
+
+                        return (
+                          <Track key={track._id}>
+                            <TrackImage
+                              onClick={() => {
+                                setCurrentTrack(track);
+                                setCurrentPlayingTrack(track);
+                              }}
+                              src={track.album?.imageUrl || track.imageUrl}
+                              alt='Pochette de l"album'
+                            />
+                            <TrackInfo>
+                              <TrackName isPlaying={isPlaying}>
+                                {track.name}
+                              </TrackName>
+
+                              <TrackArtist>
+                                {track.album?.artist?.name}
+                              </TrackArtist>
+                            </TrackInfo>
+                          </Track>
+                        );
+                      })}
                     </TrackList>
                   </Section>
                 )}
@@ -124,6 +147,26 @@ const AllPlaylist = () => {
                     </ArtistList>
                   </Section>
                 )}
+                {filteredData.playlists.length > 0 && (
+                  <Section>
+                    <SectionTitle>Playlists</SectionTitle>
+                    <AlbumList>
+                      {filteredData.playlists.map(playlist => (
+                        <StyledLink
+                          to={`/playlist/${playlist._id}`}
+                          key={playlist._id}>
+                          <Album key={playlist._id}>
+                            <AlbumImage
+                              src={playlist.imageUrl}
+                              alt="Album Cover"
+                            />
+                            <AlbumName>{playlist.name}</AlbumName>
+                          </Album>
+                        </StyledLink>
+                      ))}
+                    </AlbumList>
+                  </Section>
+                )}
               </Results>
             )}
         </Content>
@@ -140,15 +183,11 @@ const Container = styled.div`
   color: white;
   font-family: Arial, sans-serif;
   border-radius: 7px;
+  padding: 0 1rem;
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: white;
-`;
-const Title = styled.h1`
-  font-size: 1.5em;
-  margin-left: 2rem;
-  margin-top: 2rem;
 `;
 
 const Header = styled.header`
@@ -196,59 +235,69 @@ const Results = styled.div`
   gap: 20px;
 `;
 
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: space-between;
-
-  &:not(:last-child) {
-    margin-bottom: 20px;
-  }
-`;
+const Section = styled.section``;
 
 const SectionTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.5em;
+  color: white;
+  margin-bottom: 10px;
+  font-family: Arial, sans-serif;
 `;
 
 const TrackList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
 `;
 
 const Track = styled.div`
-  display: grid;
-  grid-template-columns: 50px 1fr 1fr 50px;
+  display: flex;
   align-items: center;
-  cursor: pointer;
+  padding: 10px;
+
+  border-radius: 5px;
   &:hover {
     background-color: #282828;
+
+    transition: 0.2s ease-in-out;
   }
 `;
 
 const TrackImage = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
+`;
+
+const TrackInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
 `;
 
 const TrackName = styled.p`
   font-size: 16px;
   font-weight: bold;
+  color: ${props => (props.isPlaying ? '#1DB954' : '#FFFFFF')};
+  margin-bottom: 0px;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const TrackArtist = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   color: #b3b3b3;
+  margin-top: 0px;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+    color: #fff;
+  }
 `;
-
-const TrackDuration = styled.p`
-  font-size: 16px;
-  color: #b3b3b3;
-`;
-
 const AlbumList = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

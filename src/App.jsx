@@ -14,6 +14,7 @@ import Layout from './components/SideBarLayout'; // Importez votre composant Lay
 import AudioPlayer from './components/AudioPlayer';
 import AudioPlayerProvider from './utils/context/AudioPlayerContext/AudioPlayerContext';
 import ArtistPage from './pages/ArtistPage';
+import PlaylistPage from './pages/PlaylistPage';
 
 const App = () => {
   return (
@@ -40,6 +41,10 @@ const App = () => {
             <Route
               path="/favorite"
               element={<Layout rightComponent={<FavoritePage />} />}
+            />
+            <Route
+              path="/playlist/:id"
+              element={<Layout rightComponent={<PlaylistPage />} />}
             />
             <Route
               path="/"

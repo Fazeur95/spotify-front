@@ -8,7 +8,7 @@ import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
 
-const LikedPlaylist = ({album}) => {
+const PopularArtists = ({playlist}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -16,13 +16,14 @@ const LikedPlaylist = ({album}) => {
   const [likedTracks, setLikedTracks] = useState(
     JSON.parse(localStorage.getItem('likedTracks')) || [],
   );
+  console.log(playlist);
 
   useEffect(() => {
-    if (!album.tracks.length === 0) return;
+    if (!playlist.tracks.length === 0) return;
 
-    setTracks([...album.tracks]);
-    // setTotalDuration(getTotalDuration(album.map(album => album.tracks).flat()));
-  }, [album]);
+    setTracks([...playlist.tracks]);
+    // setTotalDuration(getTotalDuration(playlist.map(playlist => playlist.tracks).flat()));
+  }, [playlist]);
 
   const likeTrack = track => {
     const isTrackLiked = likedTracks.find(t => t._id === track._id);
@@ -42,33 +43,32 @@ const LikedPlaylist = ({album}) => {
   if (!tracks) {
     return null;
   }
-  console.log(likedTracks);
 
   return (
     <TrackListContainer>
       <TrackContainer>
         <ColumnTitlePlace>#</ColumnTitlePlace>
         <ColumnTitle>Titre</ColumnTitle>
-        <ColumnTitle>Album</ColumnTitle>
+        <ColumnTitle>playlist</ColumnTitle>
         <ColumnTitle>Date d'ajout</ColumnTitle>
         <ColumnTitle></ColumnTitle>
       </TrackContainer>
 
-      {likedTracks.map((track, index) => (
+      {tracks.map((track, index) => (
         <TrackContainer key={index}>
           <TrackPlace
             onClick={() => {
               setCurrentTrack({
                 ...track,
                 album: {
-                  imageUrl: track.album.imageUrl,
-                  name: track.album.name,
+                  imageUrl: playlist?.track?.album?.imageUrl,
+                  name: playlist?.track?.album?.name,
                   artist: {
-                    name: track.album.artist.name,
+                    name: playlist?.track?.album?.artist?.name,
                   },
                 },
               });
-              setIsPlaying(true);
+              setIsPlaying(true); // Ajoutez cette ligne pour définir l'état de lecture sur vrai
             }}>
             {index + 1}
           </TrackPlace>
@@ -80,13 +80,13 @@ const LikedPlaylist = ({album}) => {
                 {track.name}
               </TrackName>
 
-              <TrackArtist to={`/artist/${track.album.artist._id}`}>
-                {track.album.artist.name}
+              <TrackArtist to={`/artist/${playlist?.track?.album?.artist._id}`}>
+                {playlist?.track?.album?.artist?.name}
               </TrackArtist>
             </TrackInfoArtist>
           </TrackInfo>
-          <TrackAlbum>{track.album.name}</TrackAlbum>
-          <p>{track.addedDate}</p>
+          <Trackplaylist>{playlist?.track?.album?.name}</Trackplaylist>
+
           <LikedLogo
             src={
               likedTracks.find(t => t._id === track._id)
@@ -97,10 +97,10 @@ const LikedPlaylist = ({album}) => {
               likeTrack({
                 ...track,
                 album: {
-                  imageUrl: track.album.imageUrl,
-                  name: track.album.name,
+                  imageUrl: playlist.track.album.imageUrl,
+                  name: playlist.track.album.name,
                   artist: {
-                    name: track.album.artist.name,
+                    name: playlist.track.album.artist.name,
                   },
                 },
               })
@@ -114,7 +114,8 @@ const LikedPlaylist = ({album}) => {
 };
 const TrackListContainer = styled.div`
   display: flex;
-
+  height: 100vh;
+  overflow-y: auto;
   flex-direction: column;
   background-color: #121212;
   color: white;
@@ -185,7 +186,7 @@ const TrackArtist = styled(Link)`
   }
 `;
 
-const TrackAlbum = styled.p`
+const Trackplaylist = styled.p`
   font-size: 14px;
   margin: 0;
   color: #b3b3b3;
@@ -214,4 +215,4 @@ const TrackPlace = styled.div`
     cursor: pointer;
   }
 `;
-export default LikedPlaylist;
+export default PopularArtists;

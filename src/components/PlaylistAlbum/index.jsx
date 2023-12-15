@@ -1,36 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, Link} from 'react-router-dom';
 import styled from 'styled-components';
-import PopularArtists from '../../components/PopularArtists';
+import PlaylistTracks from '../../components/PlaylistTracks';
 
-const AlbumPage = () => {
-  const {id} = useParams();
-  const [album, setAlbum] = useState(null);
+const PlaylistAlbum = ({id}) => {
+  const [playlist, setPlaylists] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:6868/api/album/${id}?populate=true`)
+    fetch(`http://localhost:6868/api/playlist/${id}?populate=true`)
       .then(response => response.json())
-      .then(data => setAlbum(data));
+      .then(data => setPlaylists(data));
   }, [id]);
-
-  if (!album) return null;
+  console.log(playlist);
+  if (!playlist) return null;
 
   return (
     <AlbumPageContainer>
       <TrackContainer>
         <AlbumImageContainer>
-          <AlbumImage src={album?.imageUrl} alt="Album" loading="lazy" />
+          <AlbumImage src={playlist?.imageUrl} alt="Album" loading="lazy" />
         </AlbumImageContainer>
         <AlbumContainer>
           <TrackTitle>Album</TrackTitle>
-          <AlbumTitle>{album.name}</AlbumTitle>
-          <ArtistName to={`/artist/${album.artist._id}`}>
-            {album.artist.name}
-          </ArtistName>
+          <AlbumTitle>{playlist.name}</AlbumTitle>
         </AlbumContainer>
       </TrackContainer>
-
-      <PopularArtists album={album} />
+      <PlaylistTracks playlist={playlist} />
     </AlbumPageContainer>
   );
 };
@@ -89,4 +84,4 @@ const TrackTitle = styled.p`
   margin-bottom: 0px;
 `;
 
-export default AlbumPage;
+export default PlaylistAlbum;

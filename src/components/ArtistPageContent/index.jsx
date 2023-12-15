@@ -40,7 +40,11 @@ const ArtistPageContent = ({
                   alt="Play"
                   onClick={() => setCurrentTrack(track)}
                 />
-                <TrackImage src={track.album.imageUrl} alt="Album" />
+                <TrackImage
+                  src={track.album.imageUrl}
+                  alt="Album"
+                  loading="lazy"
+                />
                 <TrackName isPlaying={isPlaying}>{track.name}</TrackName>
                 <TrackListener>{persistantRandomNumber}</TrackListener>
               </SongList>

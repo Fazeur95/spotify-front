@@ -1,25 +1,35 @@
 import {useNavigate} from 'react-router-dom';
+import {useEffect, useState, useContext, useMemo} from 'react';
 import styled from 'styled-components';
 import PreviousButton from '../../assets/chevron-left.svg';
 import NextButton from '../../assets/chevron-right.svg';
 
 function NavigationButtons() {
   const navigate = useNavigate();
-
+  const [isScrolled, setIsScrolled] = useState(false);
   const handlePreviousClick = () => {
-    //Previous page
     navigate(-1);
   };
 
   const handleNextClick = () => {
-    //Next page
-    //Si on ne peut pas aller à la page suivante grisée le bouton next
-
     navigate(1);
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 1;
+      setIsScrolled(isScrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      // Nettoyer l'écouteur d'événements lors du démontage du composant
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <ButtonContainer>
+    <ButtonContainer isScrolled={isScrolled}>
       <IconButton
         src={PreviousButton}
         onClick={handlePreviousClick}
@@ -31,10 +41,12 @@ function NavigationButtons() {
 }
 
 const ButtonContainer = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   top: 20px;
-  left: 20px;
+  left: 22%;
+  background-color: ${({isScrolled}) =>
+    isScrolled ? 'rgba(0,0,0,0.8)' : 'transparent'};
 `;
 
 const IconButton = styled.img`

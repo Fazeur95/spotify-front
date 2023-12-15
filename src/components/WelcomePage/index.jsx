@@ -5,6 +5,7 @@ import {useMemo} from 'react';
 
 const WelcomePage = () => {
   const [albums, setAlbums] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
 
   const navigate = useNavigate();
 
@@ -14,11 +15,17 @@ const WelcomePage = () => {
       .then(data => setAlbums(data));
   }, []);
 
+  useEffect(() => {
+    fetch('http://localhost:6868/api/playlist')
+      .then(response => response.json())
+      .then(data => setPlaylists(data));
+  }, []);
+
   const randomAlbums = albums
     .sort(() => Math.random() - Math.random())
     .slice(0, 6);
 
-  console.log(randomAlbums);
+  console.log(playlists);
 
   return (
     <HomePageContainer>
@@ -37,9 +44,10 @@ const WelcomePage = () => {
           ))}
         </AlbumContainer>
       </Section>
+
       <Section>
         <SectionTitle>Conçu spécialement pour vous</SectionTitle>
-        <CardContainer>
+        <ForYouContainer>
           {albums.map((album, index) => (
             <Card
               key={index}
@@ -51,20 +59,30 @@ const WelcomePage = () => {
               <CardArtistName>{album.artist?.name}</CardArtistName>
             </Card>
           ))}
-        </CardContainer>
+        </ForYouContainer>
       </Section>
       <Section>
         <SectionTitle>pov: tu cherches les sons du moments</SectionTitle>
+        <CardContainer>
+          {playlists.map((playlist, index) => (
+            <Card
+              key={index}
+              // onClick={() => {
+              //   navigate(`/album/${playlist._id}`);
+            >
+              <CardImage src={playlist.imageUrl} alt="Card Image" />
+              <CardTitle>{playlist.name}</CardTitle>
+            </Card>
+          ))}
+        </CardContainer>
       </Section>
+      <Section></Section>
     </HomePageContainer>
   );
 };
 
 const HomePageContainer = styled.div`
-  padding-top: 1rem;
   color: white;
-  height: 100vh;
-  overflow-y: auto;
 `;
 const Title = styled.h1`
   color: white;
@@ -76,9 +94,16 @@ const AlbumContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 0px 10px;
 `;
+const ForYouContainer = styled.div`
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 10px;
+  padding: 10px;
+  margin: 10px;
+`;
 const PlaylistsContainer = styled.div`
   display: flex;
-
   align-items: center;
   background: #1a1a1a;
   color: white;
@@ -103,21 +128,29 @@ const PlaylistTitle = styled.p`
 `;
 const CardContainer = styled.div`
   display: flex;
-  gap: 20px;
-  overflow-x: auto;
+  flex-wrap: wrap;
+
+  gap: 18px;
+
+  padding: 1rem;
   width: 100%;
-  scrollbar-width: thin;
 `;
 
 const Card = styled.div`
-  width: 170px;
+  flex: 1 0 200px;
+  max-width: 200px;
   border-radius: 10px;
   padding: 1rem;
-  background-color: #121212;
+  margin: 10px;
+  background-color: #1a1a1a;
   &:hover {
     cursor: pointer;
     background-color: #282828;
     transition: 0.3s ease-in-out;
+  }
+  @media (max-width: 600px) {
+    flex: 1 0 150px;
+    max-width: 150px;
   }
 `;
 
@@ -128,12 +161,13 @@ const CardTitle = styled.h2`
   white-space: nowrap;
   margin-top: 5px;
   overflow: hidden;
-  text-overflow: ellipsis;
 `;
+
 const CardArtistName = styled.p`
   color: grey;
   font-size: 18px;
 `;
+
 const CardImage = styled.img`
   width: 100%; /* Make sure the image takes the full width of its container */
   height: auto; /* Maintain the aspect ratio of the image */

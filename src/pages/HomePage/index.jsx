@@ -8,9 +8,7 @@ import RandomPlaylist from '../../components/RandomPlaylist';
 function HomePage() {
   return (
     <HomePageContainer>
-      <div>
-        <WelcomePage />
-      </div>
+      <WelcomePage />
     </HomePageContainer>
   );
 }
@@ -19,8 +17,9 @@ const HomePageContainer = styled.div`
   flex-direction: column;
   //Mettre un dégradé de couleur
   border-radius: 7px;
-  background: linear-gradient(180deg, #523a3a 0%, #121212 100%);
-  height: 100vh; // Prend toute la hauteur de la page
+  background: linear-gradient(180deg, #091221 0%, #121212 8%);
+  height: 100rem; // Prend toute la hauteur de la page
+  overflow: hidden; // Pour éviter que le dégradé ne déborde
   padding: 20px;
 `;
 export default HomePage;

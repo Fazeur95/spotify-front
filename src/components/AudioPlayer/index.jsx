@@ -30,7 +30,6 @@ const AudioPlayer = () => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isMaximized, setIsMaximized] = useState(false); // Utilisez le logo du volume
   const [volumeLogo, setVolumeLogo] = useState(VolumeLogoMedium); // Utilisez le logo du volume
-  const [backgroundComponent, setBackgroundComponent] = useState(null);
   const audioRef = useRef();
 
   const playerContainerRef = useRef();

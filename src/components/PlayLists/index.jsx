@@ -5,9 +5,16 @@ import LibraryLogo from '../../assets/library.svg';
 import LikedCover from '../../assets/likedCover.webp';
 
 const Playlists = () => {
+  const [playlists, setPlaylists] = useState([]);
   const [likedTracks, setLikedTracks] = useState(
     JSON.parse(localStorage.getItem('likedTracks')) || [],
   );
+  useEffect(() => {
+    fetch('http://localhost:6868/api/playlist')
+      .then(response => response.json())
+      .then(data => setPlaylists(data));
+  }, []);
+
   return (
     <PlaylistsContainer>
       <LogoContainer>
@@ -16,12 +23,25 @@ const Playlists = () => {
       </LogoContainer>
       <LikedTracksContainer>
         <LinkStyled to="/favorite">
-          <StyledCover src={LikedCover} alt="Liked Cover" />
+          <StyledCover src={LikedCover} alt="Liked Cover" loading="lazy" />
           <TitleContainer>
             <Title>Titre Likés</Title>
             <SubTitle>{likedTracks.length} morceaux</SubTitle>
           </TitleContainer>
         </LinkStyled>
+        {playlists?.map((playlist, index) => (
+          <LinkStyled key={index} to={`/playlist/${playlist._id}`}>
+            <StyledCover
+              src={playlist.imageUrl}
+              alt="Playlist Image"
+              loading="lazy"
+            />
+            <TitleContainer>
+              <Title>{playlist.name}</Title>
+              <SubTitle>{playlist?.tracks?.length} morceaux</SubTitle>
+            </TitleContainer>
+          </LinkStyled>
+        ))}
       </LikedTracksContainer>
     </PlaylistsContainer>
   );
@@ -68,6 +88,7 @@ const LikedTracksContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  justify-content: flex-start;
 `;
 
 const LinkStyled = styled(Link)`
@@ -75,6 +96,7 @@ const LinkStyled = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: #fff;
+  margin-bottom: 1rem;
   &:hover {
     cursor: pointer;
     transition: 0.2s ease-in-out;

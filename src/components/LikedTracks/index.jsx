@@ -13,16 +13,13 @@ const LikedPlaylist = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
-
   const [likedTracks, setLikedTracks] = useState(
     JSON.parse(localStorage.getItem('likedTracks')) || [],
   );
-  console.log(album);
 
   useEffect(() => {
     if (album && album.tracks && album.tracks.length !== 0) {
       setTracks([...album.tracks]);
-      // setTotalDuration(getTotalDuration(album.map(album => album.tracks).flat()));
     }
   }, [album]);
 
@@ -50,12 +47,16 @@ const LikedPlaylist = ({album}) => {
       <CoverContainer>
         <TrackContainer>
           <AlbumImageContainer>
-            <AlbumImage src={LikedCover} alt="Album" />
+            <AlbumImage src={LikedCover} alt="Album" loading="lazy" />
           </AlbumImageContainer>
           <AlbumContainer>
             <TrackTitle>Playlist</TrackTitle>
 
-            <LikedTitle>Titres Likés</LikedTitle>
+            {likedTracks.length === 0 ? (
+              <AlbumTitle>Vous n'avez pas encore aimé de titres</AlbumTitle>
+            ) : (
+              <LikedTitle>Titres Likés : {likedTracks.length}</LikedTitle>
+            )}
           </AlbumContainer>
         </TrackContainer>
         <TrackContainerBorder>
@@ -65,51 +66,52 @@ const LikedPlaylist = ({album}) => {
           <ColumnTitle>Date d'ajout</ColumnTitle>
         </TrackContainerBorder>
       </CoverContainer>
-
-      {likedTracks.map((track, index) => (
-        <TrackContainer key={index}>
-          <TrackPlace
-            onClick={() => {
-              setCurrentTrack({
-                ...track,
-                album: {
-                  imageUrl: track.album.imageUrl,
-                  name: track.album.name,
-                  artist: {
-                    name: track.album.artist.name,
+      <BackgroundContainer>
+        {likedTracks.map((track, index) => (
+          <TrackContainer key={index}>
+            <TrackPlace
+              onClick={() => {
+                setCurrentTrack({
+                  ...track,
+                  album: {
+                    imageUrl: track.album.imageUrl,
+                    name: track.album.name,
+                    artist: {
+                      name: track.album.artist.name,
+                    },
                   },
-                },
-              });
-              setIsPlaying(true);
-            }}>
-            {index + 1}
-          </TrackPlace>
-          <TrackInfo>
-            <TrackInfoArtist>
-              <TrackName
-                name={track.name}
-                currentTrackName={currentTrack?.name}>
-                {track.name}
-              </TrackName>
+                });
+                setIsPlaying(true);
+              }}>
+              {index + 1}
+            </TrackPlace>
+            <TrackInfo>
+              <TrackInfoArtist>
+                <TrackName
+                  name={track.name}
+                  currentTrackName={currentTrack?.name}>
+                  {track.name}
+                </TrackName>
 
-              <TrackArtist to={`/artist/${track.album.artist._id}`}>
-                {track.album.artist.name}
-              </TrackArtist>
-            </TrackInfoArtist>
-          </TrackInfo>
-          <TrackAlbum>{track.album.name}</TrackAlbum>
-          <p>{track.addedDate}</p>
-          <LikedLogo
-            src={
-              likedTracks.find(t => t._id === track._id)
-                ? HearthFilledLogo
-                : HearthLogo
-            }
-            alt="Like Logo"
-            onClick={() => likeTrack(track)}
-          />
-        </TrackContainer>
-      ))}
+                <TrackArtist to={`/artist/${track.album.artist._id}`}>
+                  {track.album.artist.name}
+                </TrackArtist>
+              </TrackInfoArtist>
+            </TrackInfo>
+            <TrackAlbum>{track.album.name}</TrackAlbum>
+            <p>{track.addedDate}</p>
+            <LikedLogo
+              src={
+                likedTracks.find(t => t._id === track._id)
+                  ? HearthFilledLogo
+                  : HearthLogo
+              }
+              alt="Like Logo"
+              onClick={() => likeTrack(track)}
+            />
+          </TrackContainer>
+        ))}
+      </BackgroundContainer>
     </TrackListContainer>
   );
 };
@@ -120,12 +122,20 @@ const AlbumImage = styled.img`
   object-fit: cover;
   border-radius: 7px;
 `;
+
+const BackgroundContainer = styled.div`
+  background-color: #121212;
+  color: white;
+  height: 100vh;
+  padding-bottom: 10vh;
+`;
 const CoverContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 7px;
   padding: 20px;
   background: linear-gradient(180deg, #804dfe -99%, #121212 100%);
+  height: 100vh;
 `;
 const AlbumImageContainer = styled.div`
   margin-top: 50px;
@@ -163,10 +173,10 @@ const TrackTitle = styled.p`
 `;
 const TrackListContainer = styled.div`
   display: flex;
-
   flex-direction: column;
   background-color: #121212;
   color: white;
+  height: 100vh;
 `;
 const LikedLogo = styled.img`
   width: 16px;
