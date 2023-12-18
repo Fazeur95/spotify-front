@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import LibraryLogo from '../../assets/library.svg';
 import LikedCover from '../../assets/likedCover.webp';
+import CreatePlaylist from '../CreatePlaylist';
 
 const Playlists = () => {
   const [playlists, setPlaylists] = useState([]);
@@ -20,6 +21,8 @@ const Playlists = () => {
       <LogoContainer>
         <Logo src={LibraryLogo} alt="Library Logo" />
         <LogoTitle>Bibliothèque</LogoTitle>
+
+        <CreatePlaylist />
       </LogoContainer>
       <LikedTracksContainer>
         <LinkStyled to="/favorite">
@@ -56,9 +59,9 @@ const PlaylistsContainer = styled.div`
   background-color: #121212;
   color: #fff;
 `;
-
 const LogoContainer = styled.div`
   display: flex;
+  justify-content: space-between; /* Add this line */
   align-items: center;
   margin-bottom: 20px;
   cursor: pointer;

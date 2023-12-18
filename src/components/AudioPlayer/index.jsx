@@ -286,7 +286,6 @@ const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
   background-color: ${props => (props.isMaximized ? '' : 'black')};
-
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

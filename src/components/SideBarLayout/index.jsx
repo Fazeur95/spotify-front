@@ -13,7 +13,6 @@ function Layout({rightComponent}) {
           <Header />
         </BorderContainer>
         <BorderContainer2>
-          <PlaylistComponent />
           <Playlists />
         </BorderContainer2>
       </Sidebar>
