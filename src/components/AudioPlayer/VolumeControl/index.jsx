@@ -1,27 +1,52 @@
-import React from 'react';
+// VolumeControls.js
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import VolumeLogoOff from '../../../assets/volume-off.svg';
 import VolumeLogoMedium from '../../../assets/volume-medium.svg';
 import VolumeLogoHigh from '../../../assets/volume-high.svg';
+import MaximizeLogo from '../../../assets/maximize-2.svg';
 
-const VolumeControl = ({
-  volumeValue,
-  setVolumeValue,
-  MuteSound,
+const VolumeControlComponent = ({
   volumeLogo,
+  MuteSound,
+  volumeValue,
+  handleVolumeChange,
+  handleMaximizeClick,
 }) => {
   return (
-    <div>
-      <button onClick={MuteSound}>
-        <IconStyled src={volumeLogo} alt="Volume Logo" />
-      </button>
-      <VolumeControlStyled
+    <VolumeContainer>
+      <IconStyled src={volumeLogo} onClick={MuteSound} alt="Volume Logo" />
+      <VolumeControl
+        min="0"
+        max="1"
+        style={{
+          color: 'green',
+        }}
+        step={0.01}
         value={volumeValue}
-        onChange={e => setVolumeValue(e.target.value)}
+        onChange={handleVolumeChange}
       />
-    </div>
+      <IconStyled
+        src={MaximizeLogo}
+        alt="Maximize"
+        onClick={handleMaximizeClick}
+      />
+    </VolumeContainer>
   );
 };
+
+const VolumeContainer = styled.div`
+  margin: auto 0;
+  display: flex;
+  align-self: center;
+`;
+const VolumeControl = styled.input.attrs({type: 'range'})`
+  display: flex;
+  align-items: center;
+  justifycontent: center;
+  &:hover {
+  }
+`;
 const IconStyled = styled.img`
   width: 30px;
   height: 30px;
@@ -37,11 +62,4 @@ const IconStyled = styled.img`
   }
 `;
 
-const VolumeControlStyled = styled.input.attrs({type: 'range'})`
-  display: flex;
-  align-items: center;
-  justifycontent: center;
-  &:hover {
-  }
-`;
-export default VolumeControl;
+export default VolumeControlComponent;

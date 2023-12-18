@@ -1,10 +1,11 @@
+import React from 'react';
 import styled from 'styled-components';
+import ShuffleLogo from '../../../assets/shuffle.svg';
+import isShuffleLogo from '../../../assets/isShuffle.svg';
+import PreviousLogo from '../../../assets/skip-back.svg';
 import PlayLogo from '../../../assets/play.svg';
 import PauseLogo from '../../../assets/pause.svg';
 import NextLogo from '../../../assets/skip-forward.svg';
-import PreviousLogo from '../../../assets/skip-back.svg';
-import ShuffleLogo from '../../../assets/shuffle.svg';
-import isShuffleLogo from '../../../assets/isShuffle.svg';
 import RepeatLogo from '../../../assets/repeat.svg';
 import isRepeatLogo from '../../../assets/isRepeat.svg';
 
@@ -20,37 +21,40 @@ const PlayerControls = ({
   isRepeat,
 }) => {
   return (
-    <div>
-      <button onClick={handleShuffle}>
-        <IconStyled
-          src={isShuffle ? isShuffleLogo : ShuffleLogo}
-          alt="Shuffle Logo"
-        />
-      </button>
-      <button onClick={handlePrevious}>
-        <IconStyled src={PreviousLogo} alt="Previous Logo" />
-      </button>
-      {isPlaying ? (
-        <button onClick={handlePause}>
-          <IconStyled src={PauseLogo} alt="Pause Logo" />
-        </button>
+    <ProgressContainer>
+      <IconStyled
+        src={isShuffle ? isShuffleLogo : ShuffleLogo}
+        alt="Shuffle Logo"
+        onClick={handleShuffle}
+      />
+      <IconStyled
+        src={PreviousLogo}
+        alt="Previous Logo"
+        onClick={handlePrevious}
+      />
+      {!isPlaying ? (
+        <PlayButton>
+          <IconStyled src={PlayLogo} alt="Play Logo" onClick={handlePlay} />
+        </PlayButton>
       ) : (
-        <button onClick={handlePlay}>
-          <IconStyled src={PlayLogo} alt="Play Logo" />
-        </button>
+        <PauseButton>
+          <IconStyled src={PauseLogo} alt="Pause Logo" onClick={handlePause} />
+        </PauseButton>
       )}
-      <button onClick={handleNext}>
-        <IconStyled src={NextLogo} alt="Next Logo" />
-      </button>
-      <button onClick={handleRepeat}>
-        <IconStyled
-          src={isRepeat ? isRepeatLogo : RepeatLogo}
-          alt="Repeat Logo"
-        />
-      </button>
-    </div>
+      <IconStyled src={NextLogo} alt="Next Logo" onClick={handleNext} />
+      <IconStyled
+        src={isRepeat ? isRepeatLogo : RepeatLogo}
+        alt="Repeat Logo"
+        onClick={handleRepeat}
+      />
+    </ProgressContainer>
   );
 };
+const ProgressContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 const IconStyled = styled.img`
   width: 30px;
   height: 30px;
@@ -58,11 +62,42 @@ const IconStyled = styled.img`
   background: transparent;
   border: none;
   cursor: pointer;
-  &&:hover {
+  &:hover {
     opacity: 0.5;
+    outline: none;
   }
-  &&:clicked {
+  &:clicked {
+    outline: none;
+  }
+  outline: none;
+`;
+const PlayButton = styled.button`
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  &:hover {
     opacity: 0.5;
+    outline: none;
+  }
+  &:clicked {
+    opacity: 0.5;
+    outline: none;
   }
 `;
+const PauseButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  &:hover {
+    opacity: 0.5;
+    outline: none;
+  }
+  &:clicked {
+    opacity: 0.5;
+    outline: none;
+  }
+`;
+
 export default PlayerControls;

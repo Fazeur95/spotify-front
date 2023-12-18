@@ -1,19 +1,13 @@
 import styled from 'styled-components';
 import {useState, useEffect, useRef, useContext} from 'react';
-import MinimizeLogo from '../../assets/minimize-2.svg';
-import PlayLogo from '../../assets/play.svg';
-import PauseLogo from '../../assets/pause.svg';
-import NextLogo from '../../assets/skip-forward.svg';
-import PreviousLogo from '../../assets/skip-back.svg';
-import ShuffleLogo from '../../assets/shuffle.svg';
-import isShuffleLogo from '../../assets/isShuffle.svg';
-import RepeatLogo from '../../assets/repeat.svg';
 import VolumeLogoOff from '../../assets/volume-off.svg';
 import VolumeLogoMedium from '../../assets/volume-medium.svg';
 import VolumeLogoHigh from '../../assets/volume-high.svg';
-import isRepeatLogo from '../../assets/isRepeat.svg';
-import MaximizeLogo from '../../assets/maximize-2.svg';
 import shuffle from 'just-shuffle';
+import TrackInfo from './TrackInfo';
+import PlayerControls from './PlayerControls';
+import ProgressBarComponent from './ProgressBar';
+import VolumeControlComponent from './VolumeControl';
 
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
@@ -230,27 +224,7 @@ const AudioPlayer = () => {
   return (
     <PlayerContainer>
       <Column>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}>
-          <img
-            style={{width: '80px', height: '80px'}}
-            src={currentTrack.album.imageUrl || currentTrack.album}
-            alt="track"
-          />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              marginLeft: '10px',
-            }}>
-            <SongTitle>{currentTrack?.name}</SongTitle>
-
-            <ArtistName>{currentTrack?.album?.artist?.name}</ArtistName>
-          </div>
-        </div>
+        <TrackInfo currentTrack={currentTrack} />
       </Column>
       <Column>
         <Player
@@ -263,195 +237,35 @@ const AudioPlayer = () => {
           )}
         </Player>
 
-        <ProgressContainer>
-          <IconStyled
-            src={isShuffle ? isShuffleLogo : ShuffleLogo}
-            alt="Shuffle Logo"
-            onClick={handleShuffle}
-          />
-          <IconStyled
-            src={PreviousLogo}
-            alt="Previous Logo"
-            onClick={handlePrevious}
-          />
-          {!isPlaying ? (
-            <PlayButton>
-              <IconStyled src={PlayLogo} alt="Play Logo" onClick={handlePlay} />
-            </PlayButton>
-          ) : (
-            <PauseButton>
-              <IconStyled
-                src={PauseLogo}
-                alt="Pause Logo"
-                onClick={handlePause}
-              />
-            </PauseButton>
-          )}
-          <IconStyled src={NextLogo} alt="Next Logo" onClick={handleNext} />
-          <IconStyled
-            src={isRepeat ? isRepeatLogo : RepeatLogo}
-            alt="Repeat Logo"
-            onClick={handleRepeat}
-          />
-        </ProgressContainer>
-        <ProgressContainer>
-          <Timer>
-            {Math.floor(currentTime / 60)
-              .toString()
-              .padStart(2, '0')}
-            :
-            {Math.floor(currentTime % 60)
-              .toString()
-              .padStart(2, '0')}
-          </Timer>
+        <PlayerControls
+          isPlaying={isPlaying}
+          handlePlay={handlePlay}
+          handlePause={handlePause}
+          handleNext={handleNext}
+          handlePrevious={handlePrevious}
+          handleShuffle={handleShuffle}
+          isShuffle={isShuffle}
+          handleRepeat={handleRepeat}
+          isRepeat={isRepeat}
+        />
 
-          <ProgressBar
-            value={progress || 0}
-            max={factor}
-            onChange={handleProgressChange}
-          />
-          <Timer>{totalDuration}</Timer>
-        </ProgressContainer>
+        <ProgressBarComponent
+          currentTime={currentTime}
+          progress={progress}
+          factor={factor}
+          handleProgressChange={handleProgressChange}
+          totalDuration={totalDuration}
+        />
       </Column>
 
       <Column>
-        <VolumeContainer>
-          <IconStyled src={volumeLogo} onClick={MuteSound} alt="Volume Logo" />
-          <VolumeControl
-            min="0"
-            max="1"
-            style={{
-              color: 'green',
-            }}
-            step={0.01}
-            value={volumeValue}
-            onChange={handleVolumeChange}
-          />
-          <IconStyled
-            src={MaximizeLogo}
-            alt="Maximize"
-            onClick={handleMaximizeClick}
-          />
-
-          <FullScreenDiv ref={playerContainerRef}>
-            <FullPlayerContainer>
-              <FullColumn>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}>
-                  <img
-                    style={{width: '80px', height: '80px'}}
-                    src={currentTrack?.album?.imageUrl || ''}
-                    alt="track"
-                  />
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      marginLeft: '10px',
-                    }}>
-                    <SongTitle>{currentTrack?.name}</SongTitle>
-                    <ArtistName>{currentTrack?.album?.artist?.name}</ArtistName>
-                  </div>
-                </div>
-              </FullColumn>
-              <FullColumn>
-                <Player
-                  ref={audioRef}
-                  onLoadedMetadata={handleLoadedMetadata}
-                  // onLoadedData={handleLoadedData}
-                  onTimeUpdate={handleTimeUpdate}>
-                  {currentTrack?.url && (
-                    <source src={currentTrack.url} type="audio/ogg" />
-                  )}
-                </Player>
-                <ProgressContainer>
-                  <IconStyled
-                    src={isShuffle ? isShuffleLogo : ShuffleLogo}
-                    alt="Shuffle Logo"
-                    onClick={handleShuffle}
-                  />
-                  <IconStyled
-                    src={PreviousLogo}
-                    alt="Previous Logo"
-                    onClick={handlePrevious}
-                  />
-                  {!isPlaying ? (
-                    <PlayButton>
-                      <IconStyled
-                        src={PlayLogo}
-                        alt="Play Logo"
-                        onClick={handlePlay}
-                      />
-                    </PlayButton>
-                  ) : (
-                    <PauseButton>
-                      <IconStyled
-                        src={PauseLogo}
-                        alt="Pause Logo"
-                        onClick={handlePause}
-                      />
-                    </PauseButton>
-                  )}
-                  <IconStyled
-                    src={NextLogo}
-                    alt="Next Logo"
-                    onClick={handleNext}
-                  />
-                  <IconStyled
-                    src={isRepeat ? isRepeatLogo : RepeatLogo}
-                    alt="Repeat Logo"
-                    onClick={handleRepeat}
-                  />
-                </ProgressContainer>
-                <ProgressContainer>
-                  <Timer>
-                    {Math.floor(currentTime / 60)
-                      .toString()
-                      .padStart(2, '0')}
-                    :
-                    {Math.floor(currentTime % 60)
-                      .toString()
-                      .padStart(2, '0')}
-                  </Timer>
-
-                  <ProgressBar
-                    value={progress || 0}
-                    max={factor}
-                    onChange={handleProgressChange}
-                  />
-                  <Timer>{totalDuration}</Timer>
-                </ProgressContainer>
-              </FullColumn>
-              <FullColumn>
-                <VolumeContainer>
-                  <IconStyled
-                    src={volumeLogo}
-                    onClick={MuteSound}
-                    alt="Volume Logo"
-                  />
-                  <VolumeControl
-                    min="0"
-                    max="1"
-                    step={0.01}
-                    value={volumeValue}
-                    onChange={handleVolumeChange}
-                  />
-
-                  {isMaximized && (
-                    <IconStyled
-                      src={MinimizeLogo}
-                      alt="Minimize"
-                      onClick={handleMinimizeClick}
-                    />
-                  )}
-                </VolumeContainer>
-              </FullColumn>
-            </FullPlayerContainer>
-          </FullScreenDiv>
-        </VolumeContainer>
+        <VolumeControlComponent
+          volumeLogo={volumeLogo}
+          MuteSound={MuteSound}
+          volumeValue={volumeValue}
+          handleVolumeChange={handleVolumeChange}
+          handleMaximizeClick={handleMaximizeClick}
+        />
       </Column>
     </PlayerContainer>
   );
@@ -462,10 +276,7 @@ const Player = styled.audio`
   background-color: #282828;
   color: #b3b3b3;
 `;
-const ArtistName = styled.h1`
-  color: #b3b3b3;
-  font-size: 1.1em;
-`;
+
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
@@ -477,97 +288,10 @@ const PlayerContainer = styled.div`
   height: 8vh;
   width: 100%;
 `;
-const FullPlayerContainer = styled.div`
-  position: fixed;
-  bottom: 0;
-  background-color: transparent;
-  display: grid;
-  grid-template-columns: 20% 60% 20%;
-  padding: 0.5rem 1rem;
-  gap: 20px;
-  height: 8vh;
-  width: 100%;
-`;
 
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-`;
-const FullColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const SongTitle = styled.h1`
-  color: white;
-  font-size: 1.2em;
-`;
-
-const ProgressBar = styled.input.attrs({type: 'range'})`
-  width: 80%;
-  justify-self: center;
-  align-self: center;
-`;
-
-const PlayButton = styled.button`
-  background: transparent;
-  border: none;
-  outline: none;
-  &:active {
-    outline: none;
-  }
-`;
-
-const PauseButton = styled.button`
-  background: transparent;
-  border: none;
-  &:active {
-    outline: none;
-  }
-`;
-
-const Timer = styled.span`
-  color: #b3b3b3;
-  padding: 0 10px;
-`;
-
-const VolumeControl = styled.input.attrs({type: 'range'})`
-  display: flex;
-  align-items: center;
-  justifycontent: center;
-  &:hover {
-  }
-`;
-
-const IconStyled = styled.img`
-  width: 30px;
-  height: 30px;
-  padding: 0 10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  &&:hover {
-    opacity: 0.5;
-  }
-  &&:clicked {
-    opacity: 0.5;
-  }
-`;
-
-const ProgressContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const VolumeContainer = styled.div`
-  margin: auto 0;
-  display: flex;
-  align-self: center;
-`;
-
-const FullScreenDiv = styled.div`
-  z-index: -5;
 `;
 
 export default AudioPlayer;
