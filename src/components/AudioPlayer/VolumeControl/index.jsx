@@ -5,6 +5,7 @@ import VolumeLogoOff from '../../../assets/volume-off.svg';
 import VolumeLogoMedium from '../../../assets/volume-medium.svg';
 import VolumeLogoHigh from '../../../assets/volume-high.svg';
 import MaximizeLogo from '../../../assets/maximize-2.svg';
+import MinimizeLogo from '../../../assets/minimize-2.svg';
 
 const VolumeControlComponent = ({
   volumeLogo,
@@ -12,6 +13,7 @@ const VolumeControlComponent = ({
   volumeValue,
   handleVolumeChange,
   handleMaximizeClick,
+  isMaximized,
 }) => {
   return (
     <VolumeContainer>
@@ -27,8 +29,8 @@ const VolumeControlComponent = ({
         onChange={handleVolumeChange}
       />
       <IconStyled
-        src={MaximizeLogo}
-        alt="Maximize"
+        src={isMaximized ? MinimizeLogo : MaximizeLogo} // Changez le logo en fonction de l'état de isMaximized
+        alt={isMaximized ? 'Minimize' : 'Maximize'}
         onClick={handleMaximizeClick}
       />
     </VolumeContainer>
@@ -36,9 +38,10 @@ const VolumeControlComponent = ({
 };
 
 const VolumeContainer = styled.div`
-  margin: auto 0;
+  margin: 30px;
   display: flex;
   align-self: center;
+  align-items: center;
 `;
 const VolumeControl = styled.input.attrs({type: 'range'})`
   display: flex;
@@ -57,7 +60,7 @@ const IconStyled = styled.img`
   &&:hover {
     opacity: 0.5;
   }
-  &&:clicked {
+  &&:active {
     opacity: 0.5;
   }
 `;

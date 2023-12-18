@@ -8,7 +8,6 @@ import TrackInfo from './TrackInfo';
 import PlayerControls from './PlayerControls';
 import ProgressBarComponent from './ProgressBar';
 import VolumeControlComponent from './VolumeControl';
-
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 
 const AudioPlayer = () => {
@@ -160,9 +159,8 @@ const AudioPlayer = () => {
   const handleMaximizeClick = () => {
     if (!isMaximized) {
       //L'image ne se raffraichit pas quand on change de musique
-
       playerContainerRef.current.style.backgroundImage = `url(${currentTrack?.album?.imageUrl})`;
-
+      playerContainerRef.current.style.backgroundRepeat = 'no-repeat';
       playerContainerRef.current.style.backgroundSize = 'cover';
       if (playerContainerRef.current.requestFullscreen) {
         playerContainerRef.current.requestFullscreen();
@@ -184,6 +182,11 @@ const AudioPlayer = () => {
 
   const handleMinimizeClick = () => {
     if (isMaximized) {
+      // Réinitialisez l'image de fond
+      playerContainerRef.current.style.backgroundImage = '';
+      playerContainerRef.current.style.backgroundRepeat = '';
+      playerContainerRef.current.style.backgroundSize = '';
+
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.mozCancelFullScreen) {
@@ -201,7 +204,7 @@ const AudioPlayer = () => {
   };
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsMaximized(document.fullscreenElement === playerContainerRef.current);
+      setIsMaximized(document.fullscreenElement !== null);
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
@@ -222,7 +225,7 @@ const AudioPlayer = () => {
   }
 
   return (
-    <PlayerContainer>
+    <PlayerContainer isMaximized={isMaximized} ref={playerContainerRef}>
       <Column>
         <TrackInfo currentTrack={currentTrack} />
       </Column>
@@ -257,14 +260,16 @@ const AudioPlayer = () => {
           totalDuration={totalDuration}
         />
       </Column>
-
       <Column>
         <VolumeControlComponent
           volumeLogo={volumeLogo}
           MuteSound={MuteSound}
           volumeValue={volumeValue}
           handleVolumeChange={handleVolumeChange}
-          handleMaximizeClick={handleMaximizeClick}
+          handleMaximizeClick={
+            isMaximized ? handleMinimizeClick : handleMaximizeClick
+          }
+          isMaximized={isMaximized}
         />
       </Column>
     </PlayerContainer>
@@ -273,20 +278,25 @@ const AudioPlayer = () => {
 
 const Player = styled.audio`
   width: 100%;
-  background-color: #282828;
+
   color: #b3b3b3;
 `;
 
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
-  background-color: black;
+  background-color: ${props => (props.isMaximized ? '' : 'black')};
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   display: grid;
   grid-template-columns: 20% 60% 20%;
   padding: 0.5rem 1rem;
   gap: 20px;
-  height: 8vh;
+  height: ${props => (props.isMaximized ? '100vh' : '8vh')};
   width: 100%;
+  align-items: ${props => (props.isMaximized ? 'flex-end' : 'center')};
 `;
 
 const Column = styled.div`

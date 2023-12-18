@@ -1,6 +1,7 @@
 // FullScreenPlayer.js
 import React from 'react';
 import MinimizeLogo from '../../../assets/minimize-2.svg';
+import styled from 'styled-components';
 
 const FullScreenPlayer = ({isMaximized, onMinimize, currentTrack}) => {
   const handleMinimize = () => {
