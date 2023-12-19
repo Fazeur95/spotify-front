@@ -1,49 +1,44 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import styled from 'styled-components';
 import PlaylistCover from '../../assets/playlist-image.png';
 import AddIcon from '../../assets/plus.svg';
 import AddMusic from '../../assets/music-add.svg';
+import {useNavigate} from 'react-router-dom';
+import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 function CreatePlaylist() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
+  const navigate = useNavigate();
+  const {playlists, setPlaylists} = useContext(PlaylistContext);
 
-  async function createPlaylistRequest() {
-    const defaultName = 'Ma playlist';
-    const defaultImage = PlaylistCover;
-
-    // Fetch the image file
-    const imageResponse = await fetch(defaultImage);
-    const imageBlob = await imageResponse.blob();
-
-    const formData = new FormData();
-    formData.append('name', defaultName);
-    formData.append('image', imageBlob);
-
+  const createPlaylistRequest = async () => {
     const response = await fetch('http://localhost:6868/api/playlist', {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Nouvelle Playlist',
+        imageUrl: PlaylistCover,
+      }),
     });
-
     const data = await response.json();
-
-    return data.id;
-  }
+    setPlaylists([...playlists, data]);
+    navigate(`/playlist/${data._id}`);
+  };
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    const handleClickOutside = event => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target)
       ) {
         setIsOpen(false);
       }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
     };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [containerRef]);
 
   return (

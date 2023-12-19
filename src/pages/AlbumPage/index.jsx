@@ -1,17 +1,30 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useContext, useState} from 'react';
 import {useParams, Link} from 'react-router-dom';
 import styled from 'styled-components';
 import PopularArtists from '../../components/PopularArtists';
+import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 const AlbumPage = () => {
   const {id} = useParams();
+  const {playlists, setPlaylists} = useContext(PlaylistContext);
   const [album, setAlbum] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:6868/api/album/${id}?populate=true`)
-      .then(response => response.json())
-      .then(data => setAlbum(data));
-  }, [id]);
+    if (!playlists[id]) {
+      fetch(`http://localhost:6868/api/album/${id}?populate=true`)
+        .then(response => response.json())
+        .then(data => {
+          setPlaylists(prevPlaylists => ({
+            ...prevPlaylists,
+            [id]: data,
+          }));
+        });
+    }
+  }, [id, playlists, setPlaylists]);
+
+  useEffect(() => {
+    setAlbum(playlists[id]);
+  }, [playlists, id]);
 
   if (!album) return null;
 

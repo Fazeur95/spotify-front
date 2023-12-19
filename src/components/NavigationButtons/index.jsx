@@ -35,27 +35,15 @@ const ButtonContainer = styled.div`
   display: flex;
   width: 100rem;
   align-items: center;
-  &::before {
-    content: '';
+  &:after {
     position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: black;
     top: 0;
-    width: 100%;
-    height: 1px;
-    background-color: #282828;
-    opacity: ${({isScrolled}) => (isScrolled ? '1' : '0')};
-    transition: opacity 0.3s ease-in-out;
+    left: 0;
+    opacity: 0.5;
   }
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 1px;
-    background-color: #282828;
-    opacity: ${({isScrolled}) => (isScrolled ? '1' : '0')};
-    transition: opacity 0.3s ease-in-out;
-  }
-
   left: 22%;
 `;
 
@@ -64,6 +52,7 @@ const IconButton = styled.img`
   height: 30px;
   cursor: pointer;
   border-radius: 50%;
+  background-color: transparent;
   background-color: #282828;
   margin: 0 15px;
   transition: 0.2s;

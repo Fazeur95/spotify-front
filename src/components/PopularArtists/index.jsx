@@ -7,9 +7,11 @@ import {Link} from 'react-router-dom';
 import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
+import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 const PopularArtists = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
+  const {playlists, setPlaylists} = useContext(PlaylistContext); // Utilisez useContext pour obtenir playlists et setPlaylists
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
 

@@ -1,20 +1,21 @@
-import {useState, useEffect} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import LibraryLogo from '../../assets/library.svg';
 import LikedCover from '../../assets/likedCover.webp';
 import CreatePlaylist from '../CreatePlaylist';
+import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 const Playlists = () => {
-  const [playlists, setPlaylists] = useState([]);
+  const {playlists, setPlaylists} = useContext(PlaylistContext); // Utilisez useContext pour obtenir playlists et setPlaylists
+
   const [likedTracks, setLikedTracks] = useState(
     JSON.parse(localStorage.getItem('likedTracks')) || [],
   );
+
   useEffect(() => {
-    fetch('http://localhost:6868/api/playlist')
-      .then(response => response.json())
-      .then(data => setPlaylists(data));
-  }, []);
+    localStorage.setItem('likedTracks', JSON.stringify(likedTracks));
+  }, [likedTracks]);
 
   return (
     <PlaylistsContainer>

@@ -17,51 +17,54 @@ import AudioPlayerProvider from './utils/context/AudioPlayerContext/AudioPlayerC
 import ArtistPage from './pages/ArtistPage';
 import PlaylistPage from './pages/PlaylistPage';
 import CustomPlaylist from './pages/CustomPlaylist';
+import {PlaylistProvider} from './utils/context/PlaylistContext/PlaylistContext';
 
 const App = () => {
   return (
     <>
       <ModalProvider>
         <AudioPlayerProvider>
-          <Router>
-            <Routes>
-              <Route
-                path="/search"
-                element={<Layout rightComponent={<SearchPage />} />}
-              />
-              <Route
-                path="/library"
-                element={<Layout rightComponent={<LibraryPage />} />}
-              />
-              <Route
-                path="/album/:id"
-                element={<Layout rightComponent={<AlbumPage />} />}
-              />
-              <Route
-                path="/artist/:id"
-                element={<Layout rightComponent={<ArtistPage />} />}
-              />
-              <Route
-                path="/favorite"
-                element={<Layout rightComponent={<FavoritePage />} />}
-              />
-              <Route
-                path="/playlist/:id"
-                element={<Layout rightComponent={<PlaylistPage />} />}
-              />
-              <Route
-                path="/"
-                element={<Layout rightComponent={<HomePage />} />}
-              />
-              <Route
-                path="/customPlaylist"
-                element={<Layout rightComponent={<CustomPlaylist />} />}
-              />
-              <Route path="*" element={<Navigate replace to="/" />} />
-            </Routes>
-          </Router>
+          <PlaylistProvider>
+            <Router>
+              <Routes>
+                <Route
+                  path="/search"
+                  element={<Layout rightComponent={<SearchPage />} />}
+                />
+                <Route
+                  path="/library"
+                  element={<Layout rightComponent={<LibraryPage />} />}
+                />
+                <Route
+                  path="/album/:id"
+                  element={<Layout rightComponent={<AlbumPage />} />}
+                />
+                <Route
+                  path="/artist/:id"
+                  element={<Layout rightComponent={<ArtistPage />} />}
+                />
+                <Route
+                  path="/favorite"
+                  element={<Layout rightComponent={<FavoritePage />} />}
+                />
+                <Route
+                  path="/playlist/:id"
+                  element={<Layout rightComponent={<PlaylistPage />} />}
+                />
+                <Route
+                  path="/"
+                  element={<Layout rightComponent={<HomePage />} />}
+                />
+                <Route
+                  path="/customPlaylist"
+                  element={<Layout rightComponent={<CustomPlaylist />} />}
+                />
+                <Route path="*" element={<Navigate replace to="/" />} />
+              </Routes>
+            </Router>
 
-          <AudioPlayer />
+            <AudioPlayer />
+          </PlaylistProvider>
         </AudioPlayerProvider>
       </ModalProvider>
     </>

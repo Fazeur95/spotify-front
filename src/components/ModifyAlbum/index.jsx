@@ -1,45 +1,59 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import styled from 'styled-components';
 import Modal from 'styled-react-modal';
 import CloseModal from '../../assets/x.svg';
 import OpenModal from '../../assets/more.svg';
+import {useParams, useNavigate} from 'react-router-dom';
+import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 function EditPlaylistComponent({playlistId}) {
-  const [playlistName, setPlaylistName] = useState('');
-  const [playlistImage, setPlaylistImage] = useState('');
+  const [playlist, setPlaylist] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const {id} = useParams();
+  const navigate = useNavigate();
+  const {playlists, setPlaylists} = useContext(PlaylistContext);
 
   useEffect(() => {
-    const fetchPlaylist = async () => {
-      const response = await fetch(
-        `http://localhost:6868/api/playlist/${playlistId}`,
-      );
-      const data = await response.json();
-      setPlaylistName(data.name);
-      setPlaylistImage(data.imageUrl);
-    };
-
-    fetchPlaylist();
-  }, [playlistId]);
+    fetch(`http://localhost:6868/api/playlist/${id}?populate=true`)
+      .then(response => response.json())
+      .then(data => {
+        setPlaylist(data);
+      });
+  }, [id]);
 
   const handleNameChange = event => {
-    setPlaylistName(event.target.value);
+    setPlaylist({...playlist, name: event.target.value});
   };
 
   const updatePlaylist = async () => {
-    await fetch(`http://localhost:6868/api/playlist/${playlistId}`, {
+    const response = await fetch(`http://localhost:6868/api/playlist/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: playlistName,
-        imageUrl: playlistImage,
+        name: playlist.name,
+        imageUrl: playlist.imageUrl,
       }),
     });
-    setModalOpen(false);
-    window.location.reload();
+    const data = await response.json();
+    setPlaylists(playlists.map(pl => (pl._id === data._id ? data : pl)));
+    navigate(`/playlist/${data._id}`);
   };
+
+  const deletePlaylist = async () => {
+    const response = await fetch(`http://localhost:6868/api/playlist/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    setPlaylists(playlists.filter(pl => pl._id !== id));
+    navigate(`/`);
+  };
+
+  if (!playlist) return null;
 
   return (
     <PlaylistContainer>
@@ -56,11 +70,14 @@ function EditPlaylistComponent({playlistId}) {
         <ModalTitle>Modifier les informations</ModalTitle>
         <ModalInput
           type="text"
-          value={playlistName}
+          value={playlist.name}
           placeholder="Nom de votre playlist"
           onChange={handleNameChange}
         />
-        <ModalButton onClick={updatePlaylist}>Sauvegarder</ModalButton>
+        <ModalButtonContainer>
+          <DeleteButton onClick={deletePlaylist}>Supprimer</DeleteButton>
+          <ModalButton onClick={updatePlaylist}>Sauvegarder</ModalButton>
+        </ModalButtonContainer>
       </StyledModal>
     </PlaylistContainer>
   );
@@ -80,6 +97,23 @@ const CloseIcon = styled.img.attrs({
 })`
   width: 20px;
   height: 20px;
+`;
+const ModalButtonContainer = styled.div`
+  //Display on bottom and space the elements
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DeleteButton = styled.button`
+  width: 40%;
+  padding: 15px;
+  border: none;
+  border-radius: 35px;
+  background-color: red;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 `;
 
 const PlaylistContainer = styled.div`
@@ -161,7 +195,7 @@ const ModalButton = styled.button`
   color: black;
   font-size: 16px;
   cursor: pointer;
-  margin-left: auto;
+
   margin-top: auto;
 `;
 
