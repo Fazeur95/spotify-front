@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import styled from 'styled-components';
-import TimeLogo from '../../assets/clock-3.svg';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 import {Link} from 'react-router-dom';
 import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
-import LikedCover from '../../assets/likedCover.webp';
+import LikedCover from '../../assets/LikedCover.webp';
 import {LikedTracksContext} from '../../utils/context/LikedTracksContext/LikedTracksContext';
 
 const LikedPlaylist = () => {
