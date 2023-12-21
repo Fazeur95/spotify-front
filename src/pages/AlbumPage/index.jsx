@@ -47,12 +47,16 @@ const AlbumImage = styled.img`
   height: 100%;
   object-fit: cover;
 `;
-
 const AlbumImageContainer = styled.div`
   margin-top: 50px;
   height: 232px;
   width: 232px;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    height: 150px; // Réduire la taille de l'image pour les petits écrans
+    width: 150px; // Réduire la taille de l'image pour les petits écrans
+  }
 `;
 
 const AlbumTitle = styled.h2`
@@ -76,10 +80,12 @@ const ArtistName = styled(Link)`
 const TrackContainer = styled.div`
   display: flex;
   border-radius: 7px;
-  //Make a linear gradient
-
   background: linear-gradient(180deg, #523a3a 0%, #121212 100%);
   padding: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column; // Changer la direction de la flexion pour les petits écrans
+  }
 `;
 const AlbumContainer = styled.div`
   display: flex;

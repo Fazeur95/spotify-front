@@ -128,7 +128,12 @@ const TrackListContainer = styled.div`
   background-color: #121212;
   color: white;
   padding: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column; // Changer la direction de la flexion pour les petits écrans
+  }
 `;
+
 const TrackAddedAt = styled.p`
   font-size: 14px;
   margin: 0;
@@ -150,6 +155,10 @@ const TrackContainer = styled.div`
   margin-bottom: 20px;
   border-bottom: 1px solid #282828;
   padding: 10px 0;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; // Changer la disposition de la grille pour les petits écrans
+  }
 `;
 
 const ColumnTitle = styled.h2`

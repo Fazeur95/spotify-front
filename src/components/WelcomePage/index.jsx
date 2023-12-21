@@ -144,6 +144,11 @@ const Card = styled.div`
     flex: 1 0 150px;
     max-width: 150px;
   }
+  @media (max-width: 400px) {
+    // Ajouter une media query pour les écrans plus petits
+    flex: 1 0 100px;
+    max-width: 100px;
+  }
 `;
 
 const CardTitle = styled.h2`
@@ -156,7 +161,7 @@ const CardTitle = styled.h2`
 `;
 
 const CardArtistName = styled.p`
-  color: grey;
+  color: #b3b3b3; // Changer la couleur en une couleur plus claire
   font-size: 18px;
 `;
 

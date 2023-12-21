@@ -29,6 +29,20 @@ const LogoContainer = styled.div`
   padding: 1px 10px 1px 10px;
   width: 100%;
   height: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: row; // Changer la direction de la flexion pour les petits écrans
+  }
+`;
+
+const Logo = styled.img`
+  height: 30px; /* Ajustez la taille selon vos besoins */
+  margin-bottom: 5px; /* Ajoutez une marge en bas pour l'espace */
+  margin-right: 10px; /* Ajoutez une marge à droite pour l'espace */
+
+  @media (max-width: 768px) {
+    height: 20px; // Réduire la taille du logo pour les petits écrans
+  }
 `;
 const LinkStyled = styled(Link)`
   display: flex;
@@ -45,12 +59,5 @@ const LinkStyled = styled(Link)`
     }
   }
 `;
-
-const Logo = styled.img`
-  height: 30px; /* Ajustez la taille selon vos besoins */
-  margin-bottom: 5px; /* Ajoutez une marge en bas pour l'espace */
-  margin-right: 10px; /* Ajoutez une marge à droite pour l'espace */
-`;
-const Title = styled.h3``;
 
 export default Header;

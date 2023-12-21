@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Playlists from '../PlayLists';
 import Header from '../Header';
 import NavigationButtons from '../NavigationButtons';
-import PlaylistComponent from '../CreatePlaylist';
 
 function Layout({rightComponent}) {
   return (
@@ -43,7 +42,11 @@ const Sidebar = styled.div`
   top: 0;
   left: 0;
   padding: 15px;
-  color: #ffffff; // Added to make text white
+  color: #ffffff;
+
+  @media (max-width: 768px) {
+    width: 50%; // Augmenter la largeur pour les petits écrans
+  }
 `;
 
 const BorderContainer = styled.div`
@@ -71,8 +74,12 @@ const MainContent = styled.div`
   margin-left: 21%;
   padding: 7px 10px;
   position: relative;
+  color: #ffffff;
 
-  color: #ffffff; // Added to make text white
+  @media (max-width: 768px) {
+    width: 50%; // Réduire la largeur pour les petits écrans
+    margin-left: 51%; // Ajuster la marge gauche pour les petits écrans
+  }
 `;
 
 export default Layout;

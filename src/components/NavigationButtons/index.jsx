@@ -35,16 +35,12 @@ const ButtonContainer = styled.div`
   display: flex;
   width: 100rem;
   align-items: center;
-  &:after {
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    background-color: black;
-    top: 0;
-    left: 0;
-    opacity: 0.5;
-  }
   left: 22%;
+
+  @media (max-width: 768px) {
+    width: 80rem; // Réduire la largeur pour les petits écrans
+    left: 10%; // Ajuster la position gauche pour les petits écrans
+  }
 `;
 
 const IconButton = styled.img`
@@ -56,9 +52,15 @@ const IconButton = styled.img`
   background-color: #282828;
   margin: 0 15px;
   transition: 0.2s;
+
   &:hover {
     filter: brightness(75%);
     transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    width: 20px; // Réduire la taille de l'icône pour les petits écrans
+    height: 20px; // Réduire la taille de l'icône pour les petits écrans
   }
 `;
 export default NavigationButtons;

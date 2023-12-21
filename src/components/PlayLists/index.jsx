@@ -94,6 +94,11 @@ const LikedTracksContainer = styled.div`
   width: 100%;
   height: 100%;
   justify-content: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: row; // Changer la direction de la flexion pour les petits écrans
+    flex-wrap: wrap; // Ajouter un wrap pour permettre aux éléments de passer à la ligne suivante
+  }
 `;
 
 const LinkStyled = styled(Link)`
@@ -116,6 +121,11 @@ const StyledCover = styled.img`
   border-radius: 8px;
   object-fit: cover;
   margin-right: 10px;
+
+  @media (max-width: 768px) {
+    width: 40px; // Réduire la taille de l'image pour les petits écrans
+    height: 40px; // Réduire la taille de l'image pour les petits écrans
+  }
 `;
 
 const TitleContainer = styled.div`

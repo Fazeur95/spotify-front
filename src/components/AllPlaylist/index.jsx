@@ -314,11 +314,15 @@ const Album = styled.div`
   align-items: center;
   cursor: pointer;
 `;
-
 const AlbumImage = styled.img`
   width: 150px;
   height: 150px;
   object-fit: cover;
+
+  @media (max-width: 768px) {
+    width: 100px; // Réduire la taille de l'image pour les petits écrans
+    height: 100px; // Réduire la taille de l'image pour les petits écrans
+  }
 `;
 
 const AlbumName = styled.p`
@@ -354,6 +358,11 @@ const ArtistImage = styled.img`
   @media (min-width: 768px) {
     width: 150px;
     height: 150px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100px; // Réduire la taille de l'image pour les petits écrans
+    height: 100px; // Réduire la taille de l'image pour les petits écrans
   }
 `;
 
