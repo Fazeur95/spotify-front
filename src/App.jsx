@@ -23,8 +23,8 @@ const App = () => {
   return (
     <>
       <ModalProvider>
-        <AudioPlayerProvider>
-          <PlaylistProvider>
+        <PlaylistProvider>
+          <AudioPlayerProvider>
             <Router>
               <Routes>
                 <Route
@@ -64,8 +64,8 @@ const App = () => {
             </Router>
 
             <AudioPlayer />
-          </PlaylistProvider>
-        </AudioPlayerProvider>
+          </AudioPlayerProvider>
+        </PlaylistProvider>
       </ModalProvider>
     </>
   );

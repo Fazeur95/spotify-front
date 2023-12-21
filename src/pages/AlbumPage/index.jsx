@@ -6,25 +6,15 @@ import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistConte
 
 const AlbumPage = () => {
   const {id} = useParams();
-  const {playlists, setPlaylists} = useContext(PlaylistContext);
   const [album, setAlbum] = useState(null);
 
   useEffect(() => {
-    if (!playlists[id]) {
-      fetch(`http://localhost:6868/api/album/${id}?populate=true`)
-        .then(response => response.json())
-        .then(data => {
-          setPlaylists(prevPlaylists => ({
-            ...prevPlaylists,
-            [id]: data,
-          }));
-        });
-    }
-  }, [id, playlists, setPlaylists]);
-
-  useEffect(() => {
-    setAlbum(playlists[id]);
-  }, [playlists, id]);
+    fetch(`http://localhost:6868/api/album/${id}?populate=true`)
+      .then(response => response.json())
+      .then(data => {
+        setAlbum({...data});
+      });
+  }, [id]);
 
   if (!album) return null;
 

@@ -40,6 +40,24 @@ const PopularArtists = ({playlist}) => {
     setLikedTracks(newLikedTracks);
     localStorage.setItem('likedTracks', JSON.stringify(newLikedTracks));
   };
+
+  const handleOnClickLike = track => {
+    const trackInPlaylist = playlist.tracks.find(t => t._id === track._id);
+
+    if (!trackInPlaylist) return;
+
+    likeTrack({
+      ...trackInPlaylist,
+      album: {
+        imageUrl: trackInPlaylist?.album?.imageUrl,
+        name: trackInPlaylist?.album?.name,
+        artist: {
+          name: trackInPlaylist?.album?.artist?.name,
+        },
+      },
+    });
+  };
+
   if (!tracks) {
     return null;
   }
@@ -61,10 +79,10 @@ const PopularArtists = ({playlist}) => {
               setCurrentTrack({
                 ...track,
                 album: {
-                  imageUrl: playlist?.track?.album?.imageUrl,
-                  name: playlist?.track?.album?.name,
+                  imageUrl: track?.album?.imageUrl,
+                  name: track?.album?.name,
                   artist: {
-                    name: playlist?.track?.album?.artist?.name,
+                    name: track?.album?.artist?.name,
                   },
                 },
               });
@@ -80,12 +98,14 @@ const PopularArtists = ({playlist}) => {
                 {track.name}
               </TrackName>
 
-              <TrackArtist to={`/artist/${playlist?.track?.album?.artist._id}`}>
-                {playlist?.track?.album?.artist?.name}
+              <TrackArtist to={`/artist/${track?.album?.artist._id}`}>
+                {track?.album?.artist?.name}
               </TrackArtist>
             </TrackInfoArtist>
           </TrackInfo>
-          <Trackplaylist>{playlist?.track?.album?.name}</Trackplaylist>
+          <TrackAlbumLink to={`/album/${track?.album?._id}`}>
+            {track?.album?.name}
+          </TrackAlbumLink>
 
           <LikedLogo
             src={
@@ -93,18 +113,9 @@ const PopularArtists = ({playlist}) => {
                 ? HearthFilledLogo
                 : HearthLogo
             }
-            onClick={() =>
-              likeTrack({
-                ...track,
-                album: {
-                  imageUrl: playlist.track.album.imageUrl,
-                  name: playlist.track.album.name,
-                  artist: {
-                    name: playlist.track.album.artist.name,
-                  },
-                },
-              })
-            }
+            onClick={() => {
+              handleOnClickLike(track);
+            }}
             alt="Like Logo"
           />
         </TrackContainer>
@@ -175,6 +186,18 @@ const TrackInfoArtist = styled.div`
 `;
 
 const TrackArtist = styled(Link)`
+  font-size: 14px;
+  margin: 0;
+  color: #b3b3b3;
+
+  transition: 0.1s ease-in-out;
+  &:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+`;
+
+const TrackAlbumLink = styled(Link)`
   font-size: 14px;
   margin: 0;
   color: #b3b3b3;

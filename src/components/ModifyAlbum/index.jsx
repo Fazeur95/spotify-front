@@ -37,7 +37,7 @@ function EditPlaylistComponent({playlistId}) {
       }),
     });
     const data = await response.json();
-    setPlaylists(playlists.map(pl => (pl._id === data._id ? data : pl)));
+    // setPlaylists(playlists.map(pl => (pl._id === data._id ? data : pl)));
     navigate(`/playlist/${data._id}`);
   };
 
@@ -49,7 +49,7 @@ function EditPlaylistComponent({playlistId}) {
       },
     });
     const data = await response.json();
-    setPlaylists(playlists.filter(pl => pl._id !== id));
+    // setPlaylists(playlists.filter(pl => pl._id !== id));
     navigate(`/`);
   };
 

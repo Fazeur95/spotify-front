@@ -6,14 +6,14 @@ import EditPlaylistComponent from '../ModifyAlbum';
 import AddTracksToPlaylist from '../AddSongToPlaylist';
 
 const PlaylistAlbum = ({id}) => {
-  const [playlist, setPlaylists] = useState(null);
+  const [playlist, setPlaylist] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:6868/api/playlist/${id}?populate=true`)
       .then(response => response.json())
-      .then(data => setPlaylists(data));
+      .then(data => setPlaylist(data));
   }, [id]);
-  console.log(playlist);
+
   if (!playlist) return null;
 
   return (

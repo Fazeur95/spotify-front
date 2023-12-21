@@ -1,11 +1,12 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import {useMemo} from 'react';
+import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 const WelcomePage = () => {
   const [albums, setAlbums] = useState([]);
-  const [playlists, setPlaylists] = useState([]);
+  const {playlists} = useContext(PlaylistContext);
 
   const navigate = useNavigate();
 
@@ -15,17 +16,9 @@ const WelcomePage = () => {
       .then(data => setAlbums(data));
   }, []);
 
-  useEffect(() => {
-    fetch('http://localhost:6868/api/playlist')
-      .then(response => response.json())
-      .then(data => setPlaylists(data));
-  }, []);
-
   const randomAlbums = albums
     .sort(() => Math.random() - Math.random())
     .slice(0, 6);
-
-  console.log(playlists);
 
   return (
     <HomePageContainer>

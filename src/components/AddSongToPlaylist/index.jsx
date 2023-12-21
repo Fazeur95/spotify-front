@@ -5,7 +5,7 @@ import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistConte
 function AddTracksToPlaylist({playlistId}) {
   const [tracks, setTracks] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
-  const {playlists, setPlaylists} = useContext(PlaylistContext);
+  const {fetchPlaylists} = useContext(PlaylistContext);
 
   useEffect(() => {
     const fetchTracks = async () => {
@@ -23,15 +23,21 @@ function AddTracksToPlaylist({playlistId}) {
 
   const addTrackToPlaylist = async () => {
     const response = await fetch(
-      `http://localhost:6868/api/playlist/${playlistId}/tracks/${selectedTrack}`,
+      `http://localhost:6868/api/playlist/${playlistId}/track`,
       {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          trackId: selectedTrack,
+        }),
       },
     );
+
     const data = await response.json();
-    setPlaylists(
-      playlists.map(playlist => (playlist._id === data._id ? data : playlist)),
-    );
+
+    fetchPlaylists();
   };
 
   return (

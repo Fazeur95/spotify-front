@@ -10,7 +10,7 @@ function CreatePlaylist() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
   const navigate = useNavigate();
-  const {playlists, setPlaylists} = useContext(PlaylistContext);
+  // const {playlists, setPlaylists} = useContext(PlaylistContext);
 
   const createPlaylistRequest = async () => {
     const response = await fetch('http://localhost:6868/api/playlist', {
@@ -24,7 +24,7 @@ function CreatePlaylist() {
       }),
     });
     const data = await response.json();
-    setPlaylists([...playlists, data]);
+    // setPlaylists([...playlists, data]);
     navigate(`/playlist/${data._id}`);
   };
 

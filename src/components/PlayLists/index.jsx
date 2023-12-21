@@ -7,15 +7,20 @@ import CreatePlaylist from '../CreatePlaylist';
 import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 const Playlists = () => {
-  const {playlists, setPlaylists} = useContext(PlaylistContext); // Utilisez useContext pour obtenir playlists et setPlaylists
+  const {playlists, fetchPlaylists} = useContext(PlaylistContext); // Utilisez useContext pour obtenir playlists et setPlaylists
 
   const [likedTracks, setLikedTracks] = useState(
     JSON.parse(localStorage.getItem('likedTracks')) || [],
   );
-
   useEffect(() => {
     localStorage.setItem('likedTracks', JSON.stringify(likedTracks));
   }, [likedTracks]);
+
+  useEffect(() => {
+    fetchPlaylists();
+  }, []);
+
+  if (playlists.length < 1) return null;
 
   return (
     <PlaylistsContainer>
