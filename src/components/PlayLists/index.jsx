@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import LibraryLogo from '../../assets/library.svg';
-import LikedCover from '../../assets/likedCover.webp';
+import LikedCover from '../../assets/LikedCover.webp';
 import CreatePlaylist from '../CreatePlaylist';
 import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 import {LikedTracksContext} from '../../utils/context/LikedTracksContext/LikedTracksContext';
