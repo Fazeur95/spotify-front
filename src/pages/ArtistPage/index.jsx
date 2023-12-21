@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import ArtistPageContent from '../../components/ArtistPageContent';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
-const ArtistPage = ({album}) => {
+const ArtistPage = () => {
   const {id} = useParams();
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [artist, setArtist] = useState(null);
@@ -55,14 +55,6 @@ const ArtistPage = ({album}) => {
   const randomTracks = useMemo(() => {
     return tracks.sort(() => Math.random() - Math.random()).slice(0, 5);
   }, [tracks]);
-
-  function generateRandomNumber() {
-    return Math.floor(Math.random() * 1000000 + 1000000)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  }
-
-  const persistantRandomNumber = useMemo(() => generateRandomNumber(), []);
 
   if (!artist) return null;
   //Make a random function to get a random track from the artist

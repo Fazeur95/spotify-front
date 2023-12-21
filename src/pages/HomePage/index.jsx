@@ -1,9 +1,6 @@
 // HomePage.js
 import styled from 'styled-components';
-import Header from '../../components/Header';
-import Playlists from '../../components/Playlists';
 import WelcomePage from '../../components/WelcomePage';
-import RandomPlaylist from '../../components/RandomPlaylist';
 
 function HomePage() {
   return (
