@@ -7,15 +7,14 @@ import {Link} from 'react-router-dom';
 import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
+import {LikedTracksContext} from '../../../utils/context/LikedTracksContext/LikedTracksContext';
 
 const LikedPlaylist = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const [likedTracks, setLikedTracks] = useState(
-    JSON.parse(localStorage.getItem('likedTracks')) || [],
-  );
+  const {likedTracks, setLikedTracks} = useContext(LikedTracksContext);
 
   useEffect(() => {
     if (!album.tracks.length === 0) return;
@@ -101,6 +100,7 @@ const LikedPlaylist = ({album}) => {
                   name: track.album.name,
                   artist: {
                     name: track.album.artist.name,
+                    _id: track.album.artist._id,
                   },
                 },
               })

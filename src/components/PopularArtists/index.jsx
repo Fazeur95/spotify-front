@@ -7,19 +7,14 @@ import {Link} from 'react-router-dom';
 import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
-import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
+import {LikedTracksContext} from '../../utils/context/LikedTracksContext/LikedTracksContext';
 
 const PopularArtists = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
-  const {playlists, setPlaylists} = useContext(PlaylistContext); // Utilisez useContext pour obtenir playlists et setPlaylists
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const [likedTracks, setLikedTracks] = useState(
-    JSON.parse(localStorage.getItem('likedTracks')) || [],
-  );
-  console.log(album);
-
+  const {likedTracks, setLikedTracks} = useContext(LikedTracksContext);
   useEffect(() => {
     if (!album.tracks.length === 0) return;
 
@@ -39,12 +34,15 @@ const PopularArtists = ({album}) => {
       newLikedTracks = [...likedTracks, track];
     }
 
+    console.log('newLikedTracks', newLikedTracks);
+
     setLikedTracks(newLikedTracks);
     localStorage.setItem('likedTracks', JSON.stringify(newLikedTracks));
   };
   if (!tracks) {
     return null;
   }
+  //Modify the track added at format to be more readable
 
   return (
     <TrackListContainer>
@@ -67,6 +65,7 @@ const PopularArtists = ({album}) => {
                   name: album.name,
                   artist: {
                     name: album.artist.name,
+                    _id: album.artist._id,
                   },
                 },
               });
@@ -88,7 +87,13 @@ const PopularArtists = ({album}) => {
             </TrackInfoArtist>
           </TrackInfo>
           <TrackAlbum>{album.name}</TrackAlbum>
-          <p>{track.addedDate}</p>
+          <TrackAddedAt>
+            {new Date(track.createdAt).toLocaleDateString('fr-FR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            })}
+          </TrackAddedAt>
           <LikedLogo
             src={
               likedTracks.find(t => t._id === track._id)
@@ -103,6 +108,7 @@ const PopularArtists = ({album}) => {
                   name: album.name,
                   artist: {
                     name: album.artist.name,
+                    _id: album.artist._id,
                   },
                 },
               })
@@ -122,6 +128,11 @@ const TrackListContainer = styled.div`
   background-color: #121212;
   color: white;
   padding: 20px;
+`;
+const TrackAddedAt = styled.p`
+  font-size: 14px;
+  margin: 0;
+  color: #b3b3b3;
 `;
 const LikedLogo = styled.img`
   width: 16px;

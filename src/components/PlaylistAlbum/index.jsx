@@ -1,18 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useParams, Link} from 'react-router-dom';
 import styled from 'styled-components';
 import PlaylistTracks from '../../components/PlaylistTracks';
 import EditPlaylistComponent from '../ModifyAlbum';
 import AddTracksToPlaylist from '../AddSongToPlaylist';
+import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
 const PlaylistAlbum = ({id}) => {
   const [playlist, setPlaylist] = useState(null);
+  const {playlists, fetchPlaylists} = useContext(PlaylistContext);
 
   useEffect(() => {
-    fetch(`http://localhost:6868/api/playlist/${id}?populate=true`)
+    fetch(
+      `https://spotify-api-43ur.onrender.com/api/playlist/${id}?populate=true`,
+    )
       .then(response => response.json())
       .then(data => setPlaylist(data));
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, playlists.length]);
+
+  useEffect(() => {
+    fetchPlaylists();
+  }, [playlist]);
 
   if (!playlist) return null;
 
@@ -27,9 +36,10 @@ const PlaylistAlbum = ({id}) => {
           <AlbumTitle>{playlist.name}</AlbumTitle>
         </AlbumContainer>
       </TrackContainer>
-      <EditPlaylistComponent playlistId={id} />
-      <AddTracksToPlaylist playlistId={id} />
-      <PlaylistTracks playlist={playlist} />
+      <EditPlaylistComponent playlist={playlist} setPlaylist={setPlaylist} />
+
+      <PlaylistTracks playlist={playlist} setPlaylist={setPlaylist} />
+      <AddTracksToPlaylist playlist={playlist} setPlaylist={setPlaylist} />
     </AlbumPageContainer>
   );
 };

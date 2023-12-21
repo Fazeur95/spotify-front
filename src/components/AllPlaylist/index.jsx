@@ -13,17 +13,23 @@ const AllPlaylist = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tracksResponse = await fetch('http://localhost:6868/api/track');
+        const tracksResponse = await fetch(
+          'https://spotify-api-43ur.onrender.com/api/track',
+        );
         const tracks = await tracksResponse.json();
 
-        const albumsResponse = await fetch('http://localhost:6868/api/album');
+        const albumsResponse = await fetch(
+          'https://spotify-api-43ur.onrender.com/api/album',
+        );
         const albums = await albumsResponse.json();
 
-        const artistsResponse = await fetch('http://localhost:6868/api/artist');
+        const artistsResponse = await fetch(
+          'https://spotify-api-43ur.onrender.com/api/artist',
+        );
         const artists = await artistsResponse.json();
 
         const playlistResponse = await fetch(
-          'http://localhost:6868/api/playlist',
+          'https://spotify-api-43ur.onrender.com/api/playlist',
         );
         const playlists = await playlistResponse.json();
 
@@ -54,8 +60,6 @@ const AllPlaylist = () => {
       playlist.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ),
   };
-  console.log(filteredData.tracks);
-
   return (
     <Container>
       <Header>

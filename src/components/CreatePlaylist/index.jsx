@@ -13,16 +13,19 @@ function CreatePlaylist() {
   // const {playlists, setPlaylists} = useContext(PlaylistContext);
 
   const createPlaylistRequest = async () => {
-    const response = await fetch('http://localhost:6868/api/playlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      'https://spotify-api-43ur.onrender.com/api/playlist',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: 'Nouvelle Playlist',
+          imageUrl: PlaylistCover,
+        }),
       },
-      body: JSON.stringify({
-        name: 'Nouvelle Playlist',
-        imageUrl: PlaylistCover,
-      }),
-    });
+    );
     const data = await response.json();
     // setPlaylists([...playlists, data]);
     navigate(`/playlist/${data._id}`);

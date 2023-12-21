@@ -9,7 +9,7 @@ const AlbumPage = () => {
   const [album, setAlbum] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:6868/api/album/${id}?populate=true`)
+    fetch(`https://spotify-api-43ur.onrender.com/api/album/${id}?populate=true`)
       .then(response => response.json())
       .then(data => {
         setAlbum({...data});

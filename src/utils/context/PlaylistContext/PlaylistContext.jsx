@@ -7,7 +7,9 @@ export const PlaylistProvider = ({children}) => {
   const [playlists, setPlaylists] = useState([]);
 
   const fetchPlaylists = async () => {
-    const response = await fetch('http://localhost:6868/api/playlist');
+    const response = await fetch(
+      'https://spotify-api-43ur.onrender.com/api/playlist',
+    );
     const data = await response.json();
     setPlaylists([...data]);
   };

@@ -8,20 +8,14 @@ import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
 import LikedCover from '../../assets/likedCover.webp';
+import {LikedTracksContext} from '../../utils/context/LikedTracksContext/LikedTracksContext';
 
-const LikedPlaylist = ({album}) => {
+const LikedPlaylist = () => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
-  const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [likedTracks, setLikedTracks] = useState(
-    JSON.parse(localStorage.getItem('likedTracks')) || [],
-  );
 
-  useEffect(() => {
-    if (album && album.tracks && album.tracks.length !== 0) {
-      setTracks([...album.tracks]);
-    }
-  }, [album]);
+  // Utilisez le contexte pour obtenir likedTracks et setLikedTracks
+  const {likedTracks, setLikedTracks} = useContext(LikedTracksContext);
 
   const likeTrack = track => {
     const isTrackLiked = likedTracks.find(t => t._id === track._id);
@@ -38,9 +32,7 @@ const LikedPlaylist = ({album}) => {
     setLikedTracks(newLikedTracks);
     localStorage.setItem('likedTracks', JSON.stringify(newLikedTracks));
   };
-  if (!tracks) {
-    return null;
-  }
+  console.log(likedTracks);
 
   return (
     <TrackListContainer>
@@ -63,6 +55,7 @@ const LikedPlaylist = ({album}) => {
           <ColumnTitlePlace>#</ColumnTitlePlace>
           <ColumnTitle>Titre</ColumnTitle>
           <ColumnTitle>Album</ColumnTitle>
+          <ColumnTitle>Likez</ColumnTitle>
           <ColumnTitle>Date d'ajout</ColumnTitle>
         </TrackContainerBorder>
       </CoverContainer>
@@ -93,13 +86,20 @@ const LikedPlaylist = ({album}) => {
                   {track.name}
                 </TrackName>
 
-                <TrackArtist to={`/artist/${track.album.artist._id}`}>
+                <TrackArtist to={`/artist/${track?.album?.artist?._id}`}>
                   {track.album.artist.name}
                 </TrackArtist>
               </TrackInfoArtist>
             </TrackInfo>
-            <TrackAlbum>{track.album.name}</TrackAlbum>
-            <p>{track.addedDate}</p>
+            <TrackAlbum
+              to={
+                track.album && track.album._id
+                  ? `/album/${track.album._id}`
+                  : '#'
+              }>
+              {track.album.name}
+            </TrackAlbum>
+
             <LikedLogo
               src={
                 likedTracks.find(t => t._id === track._id)
@@ -109,6 +109,13 @@ const LikedPlaylist = ({album}) => {
               alt="Like Logo"
               onClick={() => likeTrack(track)}
             />
+            <TrackAddedDate>
+              {new Date(track.createdAt).toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+              })}
+            </TrackAddedDate>
           </TrackContainer>
         ))}
       </BackgroundContainer>
@@ -126,16 +133,20 @@ const AlbumImage = styled.img`
 const BackgroundContainer = styled.div`
   background-color: #121212;
   color: white;
-  height: 100vh;
+  height: 100%;
   padding-bottom: 10vh;
 `;
+
+const TrackAddedDate = styled.p`
+  font-size: 14px;
+`;
+
 const CoverContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 7px;
   padding: 20px;
   background: linear-gradient(180deg, #804dfe -99%, #121212 100%);
-  height: 100vh;
 `;
 const AlbumImageContainer = styled.div`
   margin-top: 50px;
@@ -152,7 +163,7 @@ const AlbumTitle = styled.h2`
 `;
 
 const LikedTitle = styled.h2`
-  font-size: 4em;
+  font-size: 3.5em;
   margin-top: 0.5rem;
   color: inherit; 
   text-decoration: 
@@ -176,7 +187,8 @@ const TrackListContainer = styled.div`
   flex-direction: column;
   background-color: #121212;
   color: white;
-  height: 100vh;
+  height: 100%;
+  overflow-y: auto;
 `;
 const LikedLogo = styled.img`
   width: 16px;
@@ -189,7 +201,7 @@ const LikedLogo = styled.img`
 
 const TrackContainer = styled.div`
   display: grid;
-  grid-template-columns: 0.3fr 3fr 2fr 1fr 1fr;
+  grid-template-columns: 0.25fr 3fr 3fr 1.8fr 1fr;
   align-items: center;
   margin-bottom: 20px;
 
@@ -197,7 +209,7 @@ const TrackContainer = styled.div`
 `;
 const TrackContainerBorder = styled.div`
   display: grid;
-  grid-template-columns: 0.3fr 3fr 2fr 1fr 1fr;
+  grid-template-columns: 0.25fr 3fr 3fr 1.8fr 1fr;
   align-items: center;
   margin-bottom: 20px;
   border-bottom: 1px solid #282828;
@@ -251,10 +263,15 @@ const TrackArtist = styled(Link)`
   }
 `;
 
-const TrackAlbum = styled.p`
+const TrackAlbum = styled(Link)`
   font-size: 14px;
   margin: 0;
   color: #b3b3b3;
+  transition: 0.1s ease-in-out;
+  &:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
 `;
 
 const DurationIcon = styled.img`

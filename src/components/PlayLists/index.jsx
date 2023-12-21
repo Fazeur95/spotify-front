@@ -5,16 +5,12 @@ import LibraryLogo from '../../assets/library.svg';
 import LikedCover from '../../assets/likedCover.webp';
 import CreatePlaylist from '../CreatePlaylist';
 import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
+import {LikedTracksContext} from '../../utils/context/LikedTracksContext/LikedTracksContext';
 
 const Playlists = () => {
   const {playlists, fetchPlaylists} = useContext(PlaylistContext); // Utilisez useContext pour obtenir playlists et setPlaylists
 
-  const [likedTracks, setLikedTracks] = useState(
-    JSON.parse(localStorage.getItem('likedTracks')) || [],
-  );
-  useEffect(() => {
-    localStorage.setItem('likedTracks', JSON.stringify(likedTracks));
-  }, [likedTracks]);
+  const {likedTracks, setLikedTracks} = useContext(LikedTracksContext); // Utilisez le contexte pour obtenir likedTracks et setLikedTracks
 
   useEffect(() => {
     fetchPlaylists();

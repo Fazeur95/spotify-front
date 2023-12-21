@@ -7,17 +7,13 @@ import {Link} from 'react-router-dom';
 import PlayButton from '../../assets/play.svg';
 import HearthLogo from '../../assets/heart.svg';
 import HearthFilledLogo from '../../assets/heart-filled.svg';
+import {LikedTracksContext} from '../../utils/context/LikedTracksContext/LikedTracksContext';
 
-const PopularArtists = ({playlist}) => {
+const PlaylistTracks = ({playlist, setPlaylist}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [tracks, setTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const [likedTracks, setLikedTracks] = useState(
-    JSON.parse(localStorage.getItem('likedTracks')) || [],
-  );
-  console.log(playlist);
-
+  const {likedTracks, setLikedTracks} = useContext(LikedTracksContext);
   useEffect(() => {
     if (!playlist.tracks.length === 0) return;
 
@@ -53,9 +49,27 @@ const PopularArtists = ({playlist}) => {
         name: trackInPlaylist?.album?.name,
         artist: {
           name: trackInPlaylist?.album?.artist?.name,
+          _id: trackInPlaylist?.album?.artist?._id,
         },
       },
     });
+  };
+  const handleDeleteTrack = async track => {
+    const response = await fetch(
+      `https://spotify-api-43ur.onrender.com/api/playlist/${playlist._id}/track/${track._id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    const data = await response.json();
+
+    setPlaylist(data);
+
+    setTracks(tracks.filter(track => track._id !== data._id));
   };
 
   if (!tracks) {
@@ -69,7 +83,8 @@ const PopularArtists = ({playlist}) => {
         <ColumnTitle>Titre</ColumnTitle>
         <ColumnTitle>Album</ColumnTitle>
         <ColumnTitle>Date d'ajout</ColumnTitle>
-        <ColumnTitle></ColumnTitle>
+        <ColumnTitle>Likez</ColumnTitle>
+        <ColumnTitle>Supprimer le titre</ColumnTitle>
       </TrackContainer>
 
       {tracks.map((track, index) => (
@@ -106,7 +121,13 @@ const PopularArtists = ({playlist}) => {
           <TrackAlbumLink to={`/album/${track?.album?._id}`}>
             {track?.album?.name}
           </TrackAlbumLink>
-
+          <TrackAddedDate>
+            {new Date(track.createdAt).toLocaleDateString('fr-FR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            })}
+          </TrackAddedDate>
           <LikedLogo
             src={
               likedTracks.find(t => t._id === track._id)
@@ -118,6 +139,10 @@ const PopularArtists = ({playlist}) => {
             }}
             alt="Like Logo"
           />
+
+          <TrackDeleteButton onClick={() => handleDeleteTrack(track)}>
+            Supprimer
+          </TrackDeleteButton>
         </TrackContainer>
       ))}
     </TrackListContainer>
@@ -125,12 +150,24 @@ const PopularArtists = ({playlist}) => {
 };
 const TrackListContainer = styled.div`
   display: flex;
-  height: 100vh;
+  height: 100%;
   overflow-y: auto;
   flex-direction: column;
   background-color: #121212;
   color: white;
   padding: 20px;
+`;
+const TrackDeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #b3b3b3;
+  font-size: 14px;
+  transition: 0.1s ease-in-out;
+  &:hover {
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 const LikedLogo = styled.img`
   width: 16px;
@@ -140,10 +177,15 @@ const LikedLogo = styled.img`
     cursor: pointer;
   }
 `;
+const TrackAddedDate = styled.p`
+  font-size: 14px;
+  margin: 0;
+  color: #b3b3b3;
+`;
 
 const TrackContainer = styled.div`
   display: grid;
-  grid-template-columns: 0.3fr 3fr 2fr 1fr 1fr;
+  grid-template-columns: 0.3fr 3fr 2fr 1fr 1fr 1fr;
   align-items: center;
   margin-bottom: 20px;
   border-bottom: 1px solid #282828;
@@ -238,4 +280,4 @@ const TrackPlace = styled.div`
     cursor: pointer;
   }
 `;
-export default PopularArtists;
+export default PlaylistTracks;

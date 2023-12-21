@@ -8,7 +8,7 @@ const ArtistPageContent = ({
   tracks,
   currentTrack,
   setCurrentTrack,
-  persistantRandomNumber,
+  numberListenings,
 }) => {
   const navigate = useNavigate();
   console.log(tracks);
@@ -23,7 +23,7 @@ const ArtistPageContent = ({
         <ImageStyled src={artist.imageUrl} alt="Artist" loading="lazy" />
         <ArtistName>{artist.name}</ArtistName>
         <MonthlyListeners>
-          {persistantRandomNumber} auditeurs mensuels
+          {numberListenings} auditeurs mensuels
         </MonthlyListeners>
       </ImageContainer>
 
@@ -46,7 +46,7 @@ const ArtistPageContent = ({
                   loading="lazy"
                 />
                 <TrackName isPlaying={isPlaying}>{track.name}</TrackName>
-                <TrackListener>{persistantRandomNumber}</TrackListener>
+                <TrackListener>{numberListenings}</TrackListener>
               </SongList>
             );
           })}

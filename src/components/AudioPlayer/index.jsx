@@ -28,7 +28,7 @@ const AudioPlayer = () => {
   const playerContainerRef = useRef();
 
   useEffect(() => {
-    fetch('http://localhost:6868/api/track').then(response =>
+    fetch('https://spotify-api-43ur.onrender.com/api/track').then(response =>
       response.json().then(data => {
         setTrackList(data);
       }),

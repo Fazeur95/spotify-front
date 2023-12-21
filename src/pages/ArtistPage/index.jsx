@@ -9,17 +9,23 @@ const ArtistPage = ({album}) => {
   const {setCurrentTrack, currentTrack} = useContext(AudioPlayerContext);
   const [artist, setArtist] = useState(null);
   const [tracks, setTracks] = useState([]);
+  const [numberListenings, setNumberListenings] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:6868/api/artist/${id}?populate=true`)
+    fetch(
+      `https://spotify-api-43ur.onrender.com/api/artist/${id}?populate=true`,
+    )
       .then(response => response.json())
-      .then(data => setArtist(data));
+      .then(data => {
+        setArtist(data);
+        setNumberListenings(data.numberListenings); // Stocker numberListenings dans l'état
+      });
   }, [id]);
 
   useEffect(() => {
     if (artist?.albums?.length > 0) {
       fetch(
-        `http://localhost:6868/api/album/${artist.albums[0]._id}?populate=true`,
+        `https://spotify-api-43ur.onrender.com/api/album/${artist.albums[0]._id}?populate=true`,
       )
         .then(response => response.json())
         .then(data => {
@@ -68,7 +74,7 @@ const ArtistPage = ({album}) => {
         tracks={randomTracks}
         currentTrack={currentTrack}
         setCurrentTrack={setCurrentTrack}
-        persistantRandomNumber={persistantRandomNumber}
+        numberListenings={numberListenings}
       />
     </ArtistContainer>
   );

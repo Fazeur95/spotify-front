@@ -10,7 +10,7 @@ const RandomPlaylist = () => {
 
   //Create a random playlist with 5 random tracks
   useEffect(() => {
-    fetch('http://localhost:6868/api/track?populate=true')
+    fetch('https://spotify-api-43ur.onrender.com/api/track?populate=true')
       .then(response => response.json())
       .then(data => {
         setPlaylist(data);

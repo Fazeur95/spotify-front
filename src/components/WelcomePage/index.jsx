@@ -11,7 +11,7 @@ const WelcomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:6868/api/album?populate=true')
+    fetch('https://spotify-api-43ur.onrender.com/api/album?populate=true')
       .then(response => response.json())
       .then(data => setAlbums(data));
   }, []);

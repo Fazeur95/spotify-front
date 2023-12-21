@@ -6,50 +6,52 @@ import OpenModal from '../../assets/more.svg';
 import {useParams, useNavigate} from 'react-router-dom';
 import {PlaylistContext} from '../../utils/context/PlaylistContext/PlaylistContext';
 
-function EditPlaylistComponent({playlistId}) {
-  const [playlist, setPlaylist] = useState(null);
+function EditPlaylistComponent({playlist, setPlaylist}) {
   const [modalOpen, setModalOpen] = useState(false);
+  const {fetchPlaylists} = useContext(PlaylistContext);
   const {id} = useParams();
   const navigate = useNavigate();
-  const {playlists, setPlaylists} = useContext(PlaylistContext);
 
-  useEffect(() => {
-    fetch(`http://localhost:6868/api/playlist/${id}?populate=true`)
-      .then(response => response.json())
-      .then(data => {
-        setPlaylist(data);
-      });
-  }, [id]);
+  // Utilisez un état local pour le nom de la playlist
+  const [playlistName, setPlaylistName] = useState(playlist.name);
 
   const handleNameChange = event => {
-    setPlaylist({...playlist, name: event.target.value});
+    setPlaylistName(event.target.value);
   };
 
   const updatePlaylist = async () => {
-    const response = await fetch(`http://localhost:6868/api/playlist/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `https://spotify-api-43ur.onrender.com/api/playlist/${id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: playlistName,
+          imageUrl: playlist.imageUrl,
+        }),
       },
-      body: JSON.stringify({
-        name: playlist.name,
-        imageUrl: playlist.imageUrl,
-      }),
-    });
+    );
     const data = await response.json();
-    // setPlaylists(playlists.map(pl => (pl._id === data._id ? data : pl)));
-    navigate(`/playlist/${data._id}`);
+    setPlaylist(data);
+    setModalOpen(false);
+    //Reload the page
+    window.location.reload();
   };
 
   const deletePlaylist = async () => {
-    const response = await fetch(`http://localhost:6868/api/playlist/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `https://spotify-api-43ur.onrender.com/api/playlist/${id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
     const data = await response.json();
-    // setPlaylists(playlists.filter(pl => pl._id !== id));
+    await fetchPlaylists();
     navigate(`/`);
   };
 
@@ -70,7 +72,7 @@ function EditPlaylistComponent({playlistId}) {
         <ModalTitle>Modifier les informations</ModalTitle>
         <ModalInput
           type="text"
-          value={playlist.name}
+          value={playlistName}
           placeholder="Nom de votre playlist"
           onChange={handleNameChange}
         />
