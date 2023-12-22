@@ -43,6 +43,7 @@ const Sidebar = styled.div`
   left: 0;
   padding: 15px;
   color: #ffffff;
+  background-color: black;
 
   @media (max-width: 768px) {
     width: 50%; // Augmenter la largeur pour les petits écrans
