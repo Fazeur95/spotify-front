@@ -41,7 +41,6 @@ const LikedPlaylist = ({album}) => {
   if (!tracks) {
     return null;
   }
-  console.log(likedTracks);
 
   return (
     <TrackListContainer>

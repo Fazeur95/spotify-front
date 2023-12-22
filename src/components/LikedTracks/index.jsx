@@ -31,7 +31,6 @@ const LikedPlaylist = () => {
     setLikedTracks(newLikedTracks);
     localStorage.setItem('likedTracks', JSON.stringify(newLikedTracks));
   };
-  console.log(likedTracks);
 
   return (
     <TrackListContainer>

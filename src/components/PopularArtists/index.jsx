@@ -34,8 +34,6 @@ const PopularArtists = ({album}) => {
       newLikedTracks = [...likedTracks, track];
     }
 
-    console.log('newLikedTracks', newLikedTracks);
-
     setLikedTracks(newLikedTracks);
     localStorage.setItem('likedTracks', JSON.stringify(newLikedTracks));
   };

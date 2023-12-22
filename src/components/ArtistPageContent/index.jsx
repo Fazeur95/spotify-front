@@ -11,7 +11,6 @@ const ArtistPageContent = ({
   numberListenings,
 }) => {
   const navigate = useNavigate();
-  console.log(tracks);
 
   return (
     <ArtistPageContainer>

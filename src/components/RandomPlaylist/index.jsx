@@ -17,15 +17,11 @@ const RandomPlaylist = () => {
       });
   }, []);
 
-  console.log(playlist);
-
   //Display only 5 random tracks
 
   const randomTracks = playlist
     .sort(() => Math.random() - Math.random())
     .slice(0, 5);
-
-  console.log(randomTracks);
 
   if (!playlist) return null;
 
