@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext, useRef} from 'react';
 import {useParams} from 'react-router-dom';
-import styled from 'styled-components';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext'; // Import the context
+import styled from 'styled-components';
 
 const TrackTogetherPage = () => {
   const {id} = useParams(); // Get the track ID from the URL
