@@ -49,6 +49,35 @@ const TrackTogetherPage = () => {
     };
   }, [socket, id]);
 
+  useEffect(() => {
+    if (audioRef.current && socket) {
+      const handlePlay = () => {
+        socket.emit('playSound', {
+          trackId: id,
+          currentTime: audioRef.current.currentTime,
+        });
+      };
+
+      const handlePause = () => {
+        socket.emit('pauseSound');
+      };
+
+      const handleTimeUpdate = () => {
+        socket.emit('resumeSound', {currentTime: audioRef.current.currentTime});
+      };
+
+      audioRef.current.addEventListener('play', handlePlay);
+      audioRef.current.addEventListener('pause', handlePause);
+      audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
+
+      return () => {
+        audioRef.current.removeEventListener('play', handlePlay);
+        audioRef.current.removeEventListener('pause', handlePause);
+        audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+      };
+    }
+  }, [socket, id]);
+
   if (track === null) {
     return <div>Loading...</div>;
   }
