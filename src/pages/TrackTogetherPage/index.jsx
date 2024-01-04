@@ -2,7 +2,6 @@ import React, {useEffect, useState, useContext, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext'; // Import the context
-import {a} from 'react-spring';
 
 const TrackTogetherPage = () => {
   const {id} = useParams(); // Get the track ID from the URL
@@ -27,22 +26,20 @@ const TrackTogetherPage = () => {
   useEffect(() => {
     if (socket == null) return;
 
-    socket.on('playSound', track => {
-      if (track.id === id) {
-        // Play the audio player...
-
-        // You can also use the audioRef to play the audio:
-
+    socket.on('playSound', ({trackId, currentTime}) => {
+      if (trackId === id) {
+        audioRef.current.currentTime = currentTime;
         audioRef.current.play();
       }
     });
 
     socket.on('pauseSound', () => {
-      // Pause the audio player...
+      audioRef.current.pause();
     });
 
-    socket.on('resumeSound', () => {
-      // Resume the audio player...
+    socket.on('resumeSound', ({currentTime}) => {
+      audioRef.current.currentTime = currentTime;
+      audioRef.current.play();
     });
 
     return () => {
@@ -84,6 +81,7 @@ const TrackPageContainer = styled.div`
     padding: 10px;
   }
 `;
+
 const TrackInfo = styled.div`
   margin: 20px;
   display: flex;
@@ -103,6 +101,7 @@ const TrackArtist = styled.h3`
   font-size: 20px;
   color: #b3b3b3;
 `;
+
 const StyledAudio = styled.audio`
   width: 100%;
   margin: 20px;
