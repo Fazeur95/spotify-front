@@ -12,7 +12,7 @@ import VolumeControlComponent from './VolumeControl';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 import {Link} from 'react-router-dom';
 
-const AudioPlayer = () => {
+const AudioPlayer = ({track}) => {
   const {currentTrack, setCurrentTrack, socket} =
     useContext(AudioPlayerContext);
   const [progress, setProgress] = useState(0);
@@ -29,6 +29,7 @@ const AudioPlayer = () => {
   const audioRef = useRef();
 
   const playerContainerRef = useRef();
+  const [isOpen, setIsOpen] = useState(false); // Add a state for controlling if the audio player is open
 
   useEffect(() => {
     fetch('https://spotify-api-43ur.onrender.com/api/track').then(response =>
@@ -89,7 +90,14 @@ const AudioPlayer = () => {
       setVolumeValue(audioRef.current.volume);
     }
   };
+  const handlePlayClick = () => {
+    socket.emit('playSound', track);
+    setIsOpen(true); // Open the audio player when the play button is clicked
+  };
 
+  const handleCloseClick = () => {
+    setIsOpen(false); // Close the audio player when it is clicked
+  };
   const handleNext = () => {
     setIsPlaying(false);
     if (currentTrackIndex < trackList.length - 1) {
