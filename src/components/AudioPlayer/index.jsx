@@ -3,15 +3,18 @@ import {useState, useEffect, useRef, useContext} from 'react';
 import VolumeLogoOff from '../../assets/volume-off.svg';
 import VolumeLogoMedium from '../../assets/volume-medium.svg';
 import VolumeLogoHigh from '../../assets/volume-high.svg';
+import PlayTogetherIcon from '../../assets/users-round.svg';
 import shuffle from 'just-shuffle';
 import TrackInfo from './TrackInfo';
 import PlayerControls from './PlayerControls';
 import ProgressBarComponent from './ProgressBar';
 import VolumeControlComponent from './VolumeControl';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
+import {Link} from 'react-router-dom';
 
 const AudioPlayer = () => {
-  const {currentTrack, setCurrentTrack} = useContext(AudioPlayerContext);
+  const {currentTrack, setCurrentTrack, socket} =
+    useContext(AudioPlayerContext);
   const [progress, setProgress] = useState(0);
   const [volumeValue, setVolumeValue] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
@@ -35,6 +38,32 @@ const AudioPlayer = () => {
     );
   }, []);
 
+  useEffect(() => {
+    if (socket == null) return;
+
+    socket.on('playSound', track => {
+      console.log(
+        `Received playSound event with track ${JSON.stringify(track, null, 2)}`,
+      );
+      setCurrentTrack(track);
+    });
+
+    socket.on('pauseSound', () => {
+      console.log('Received pauseSound event');
+      // Pause the audio player...
+    });
+
+    socket.on('resumeSound', () => {
+      console.log('Received resumeSound event');
+      // Resume the audio player...
+    });
+
+    return () => {
+      socket.off('playSound');
+      socket.off('pauseSound');
+      socket.off('resumeSound');
+    };
+  }, [socket]);
   useEffect(() => {
     if (currentTrack) {
       setCurrentTrackIndex(
@@ -261,16 +290,26 @@ const AudioPlayer = () => {
         />
       </Column>
       <Column>
-        <VolumeControlComponent
-          volumeLogo={volumeLogo}
-          MuteSound={MuteSound}
-          volumeValue={volumeValue}
-          handleVolumeChange={handleVolumeChange}
-          handleMaximizeClick={
-            isMaximized ? handleMinimizeClick : handleMaximizeClick
-          }
-          isMaximized={isMaximized}
-        />
+        <VolumeControlDiv>
+          <StyledLink
+            to={`/track/${currentTrack._id}`}
+            onClick={() => {
+              socket.emit('playSound', currentTrack);
+            }}>
+            <StyledIcon src={PlayTogetherIcon} alt="Play Together" />
+          </StyledLink>
+
+          <VolumeControlComponent
+            volumeLogo={volumeLogo}
+            MuteSound={MuteSound}
+            volumeValue={volumeValue}
+            handleVolumeChange={handleVolumeChange}
+            handleMaximizeClick={
+              isMaximized ? handleMinimizeClick : handleMaximizeClick
+            }
+            isMaximized={isMaximized}
+          />
+        </VolumeControlDiv>
       </Column>
     </PlayerContainer>
   );
@@ -280,6 +319,11 @@ const Player = styled.audio`
   width: 100%;
 
   color: #b3b3b3;
+`;
+const VolumeControlDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const PlayerContainer = styled.div`
@@ -302,6 +346,34 @@ const PlayerContainer = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
+`;
+const StyledLink = styled(Link)`
+  width: 30px;
+  height: 30px;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  &&:hover {
+    opacity: 0.5;
+  }
+  &&:active {
+    opacity: 0.5;
+  }
+`;
+const StyledIcon = styled.img`
+  width: 30px;
+  height: 30px;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  &&:hover {
+    opacity: 0.5;
+  }
+  &&:active {
+    opacity: 0.5;
+  }
 `;
 
 export default AudioPlayer;

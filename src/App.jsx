@@ -11,6 +11,7 @@ import LibraryPage from './pages/LibraryPage';
 import HomePage from './pages/HomePage';
 import FavoritePage from './pages/FavoritePage';
 import AlbumPage from './pages/AlbumPage';
+import TrackTogetherPage from './pages/TrackTogetherPage';
 import Layout from './components/SideBarLayout'; // Importez votre composant Layout
 import AudioPlayer from './components/AudioPlayer';
 import AudioPlayerProvider from './utils/context/AudioPlayerContext/AudioPlayerContext';
@@ -42,6 +43,10 @@ const App = () => {
                     element={<Layout rightComponent={<AlbumPage />} />}
                   />
                   <Route
+                    path="/track/:id"
+                    element={<Layout rightComponent={<TrackTogetherPage />} />}
+                  />
+                  <Route
                     path="/artist/:id"
                     element={<Layout rightComponent={<ArtistPage />} />}
                   />
@@ -63,9 +68,8 @@ const App = () => {
                   />
                   <Route path="*" element={<Navigate replace to="/" />} />
                 </Routes>
+                <AudioPlayer />
               </Router>
-
-              <AudioPlayer />
             </AudioPlayerProvider>
           </PlaylistProvider>
         </LikedTracksProvider>
