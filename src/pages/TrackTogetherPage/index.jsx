@@ -2,6 +2,7 @@ import React, {useEffect, useState, useContext, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext'; // Import the context
+import {a} from 'react-spring';
 
 const TrackTogetherPage = () => {
   const {id} = useParams(); // Get the track ID from the URL
@@ -28,7 +29,11 @@ const TrackTogetherPage = () => {
 
     socket.on('playSound', track => {
       if (track.id === id) {
-        // Play the track...
+        // Play the audio player...
+
+        // You can also use the audioRef to play the audio:
+
+        audioRef.current.play();
       }
     });
 
