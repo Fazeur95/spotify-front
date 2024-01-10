@@ -1,4 +1,4 @@
-![Logo](https://cdn.cookielaw.org/logos/09f2ba89-076e-413b-b34f-a8d20370f3f5/35c98a5f-cba8-4b1a-959f-c5a7c260dfda/e0191cfb-2e2a-43c1-a11f-929eb86731a0/logo.png)
+![Logo](https://file.diplomeo-static.com/file/00/00/02/84/28401.svg)
 
 # Spotify
 
@@ -6,8 +6,8 @@ Ce projet est un clone de l'application Spotify, construit à des fins d'apprent
 
 ## Sommaire
 
-- [Usage](#usage)
-- [Features](#features)
+- [À propos](#-à-propos)
+- [Fonctionnalités](#fonctionnalités)
 
 ## 🔗 Liens
 
@@ -28,4 +28,4 @@ Ce clone de Spotify comprend les fonctionnalités suivantes :
 - **Recherche de chansons** : Les utilisateurs peuvent rechercher des chansons par titre, artiste ou album.
 - **Lecture de musique** : Les utilisateurs peuvent écouter des chansons en streaming.
 - **Création de playlists** : Les utilisateurs peuvent créer des playlists personnalisées.
-- **Partage de musique** : Les utilisateurs peuvent partager des chansons avec d'autres utilisateurs.
+- **Écoute de musique en simultané** : Les utilisateurs peuvent écouter des chansons avec d'autres utilisateurs en simultané.
