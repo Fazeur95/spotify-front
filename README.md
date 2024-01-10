@@ -1,5 +1,3 @@
-![Logo](https://file.diplomeo-static.com/file/00/00/02/84/28401.svg)
-
 # Spotify
 
 Ce projet est un clone de l'application Spotify, construit à des fins d'apprentissage. Il utilise React pour le front-end et Node.js pour le back-end, avec une base de données MongoDB pour stocker les informations des utilisateurs et les métadonnées des chansons.
