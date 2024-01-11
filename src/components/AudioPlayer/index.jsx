@@ -110,19 +110,13 @@ const AudioPlayer = ({track}) => {
   };
 
   const handlePlay = () => {
-    //Si la piste est jouer dans le socket alors on la joue
-    if (socket) {
-      socket.emit('playSound', currentTrack);
-    }
     audioRef.current.play();
     setIsPlaying(true);
   };
 
   const handlePause = () => {
     audioRef.current.pause();
-    if (socket) {
-      socket.emit('pauseSound', currentTrack);
-    }
+
     setIsPlaying(false);
   };
 
