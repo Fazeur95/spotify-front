@@ -7,18 +7,18 @@
 
 ## Table des matières
 
-- [Équipe](#équipe)
-- [Table des matières](#table-des-matières)
-- [Liens vers les dépôts GitHub](#liens-vers-les-dépôts-github)
-- [Liens de mise en production](#liens-de-mise-en-production)
-- [Fonctionnalités ajoutées](#fonctionnalités-ajoutées)
+![Team](https://img.icons8.com/fluent/16/000000/team.png) [Équipe](#équipe)
+![Content](https://img.icons8.com/fluent/16/000000/content.png) [Table des matières](#table-des-matières)
+![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [Liens vers les dépôts GitHub](#liens-vers-les-dépôts-github)
+![Link](https://img.icons8.com/fluent/16/000000/link.png) [Liens de mise en production](#liens-de-mise-en-production)
+![Feature](https://img.icons8.com/fluent/16/000000/feature.png) [Fonctionnalités ajoutées](#fonctionnalités-ajoutées)
 
 ## Liens vers les dépôts GitHub
 
-- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [BackOffice](https://github.com/Fazeur95/spotify-api)
-- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [FrontEnd](https://github.com/Fazeur95/spotify-front)
-- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [BackEnd](https://github.com/Fazeur95/spotify-back)
-- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [WebSocket](https://github.com/Fazeur95/spotify-websocket)
+![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [BackOffice](https://github.com/Fazeur95/spotify-api)
+![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [FrontEnd](https://github.com/Fazeur95/spotify-front)
+![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [BackEnd](https://github.com/Fazeur95/spotify-back)
+![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [WebSocket](https://github.com/Fazeur95/spotify-websocket)
 
 ## Liens de mise en production
 
