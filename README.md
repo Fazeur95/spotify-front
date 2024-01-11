@@ -11,7 +11,7 @@
 - ![Content](https://img.icons8.com/fluent/16/000000/content.png) [Table des matières](#table-des-matières)
 - ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [Liens vers les dépôts GitHub](#liens-vers-les-dépôts-github)
 - ![Link](https://img.icons8.com/fluent/16/000000/link.png) [Liens de mise en production](#liens-de-mise-en-production)
-- ![Feature](https://img.icons8.com/fluent/16/000000/feature.png) [Fonctionnalités ajoutées](#fonctionnalités-ajoutées)
+- ![Feature](https://img.icons8.com/fluent/16/000000/new-product.png) [Fonctionnalités ajoutées](#fonctionnalités-ajoutées)
 
 ## Liens vers les dépôts GitHub
 
