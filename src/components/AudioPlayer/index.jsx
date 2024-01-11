@@ -80,14 +80,7 @@ const AudioPlayer = ({track}) => {
       setVolumeValue(audioRef.current.volume);
     }
   };
-  const handlePlayClick = () => {
-    socket.emit('playSound', track);
-    setIsOpen(true); // Open the audio player when the play button is clicked
-  };
 
-  const handleCloseClick = () => {
-    setIsOpen(false); // Close the audio player when it is clicked
-  };
   const handleNext = () => {
     setIsPlaying(false);
     if (currentTrackIndex < trackList.length - 1) {
@@ -117,12 +110,19 @@ const AudioPlayer = ({track}) => {
   };
 
   const handlePlay = () => {
+    //Si la piste est jouer dans le socket alors on la joue
+    if (socket) {
+      socket.emit('playSound', currentTrack);
+    }
     audioRef.current.play();
     setIsPlaying(true);
   };
 
   const handlePause = () => {
     audioRef.current.pause();
+    if (socket) {
+      socket.emit('pauseSound', currentTrack);
+    }
     setIsPlaying(false);
   };
 
