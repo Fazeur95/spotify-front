@@ -15,10 +15,10 @@
 
 ## Liens vers les dépôts GitHub
 
-- [BackOffice](https://github.com/Fazeur95/spotify-api)
-- [FrontEnd](https://github.com/Fazeur95/spotify-front)
-- [BackEnd](https://github.com/Fazeur95/spotify-back)
-- [WebSocket](https://github.com/Fazeur95/spotify-websocket)
+- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [BackOffice](https://github.com/Fazeur95/spotify-api)
+- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [FrontEnd](https://github.com/Fazeur95/spotify-front)
+- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [BackEnd](https://github.com/Fazeur95/spotify-back)
+- ![GitHub](https://img.icons8.com/fluent/16/000000/github.png) [WebSocket](https://github.com/Fazeur95/spotify-websocket)
 
 ## Liens de mise en production
 
