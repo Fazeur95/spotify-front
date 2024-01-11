@@ -37,15 +37,7 @@ const WebSocketAudioPlayer = ({track, socket, trackId}) => {
         ); // Update the progress
       };
 
-      audioRef.current.addEventListener('play', handlePlay);
-      audioRef.current.addEventListener('pause', handlePause);
-      audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
-
-      return () => {
-        audioRef.current.removeEventListener('play', handlePlay);
-        audioRef.current.removeEventListener('pause', handlePause);
-        audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
-      };
+      return () => {};
     }
   }, [socket, trackId]);
 

@@ -11,6 +11,7 @@ import ProgressBarComponent from './ProgressBar';
 import VolumeControlComponent from './VolumeControl';
 import {AudioPlayerContext} from '../../utils/context/AudioPlayerContext/AudioPlayerContext';
 import {Link} from 'react-router-dom';
+import {io} from 'socket.io-client';
 
 const AudioPlayer = ({track}) => {
   const {currentTrack, setCurrentTrack, socket} =
@@ -40,31 +41,21 @@ const AudioPlayer = ({track}) => {
   }, []);
 
   useEffect(() => {
-    if (socket == null) return;
+    const newSocket = io('http://localhost:8083', {
+      transports: ['websocket'],
+      upgrade: false,
+    });
 
-    socket.on('playSound', track => {
-      console.log(
-        `Received playSound event with track ${JSON.stringify(track, null, 2)}`,
-      );
+    newSocket.on('playSound', track => {
       setCurrentTrack(track);
+      setIsPlaying(true);
     });
 
-    socket.on('pauseSound', () => {
-      console.log('Received pauseSound event');
-      // Pause the audio player...
-    });
+    return () => newSocket.disconnect();
+  }, []);
 
-    socket.on('resumeSound', () => {
-      console.log('Received resumeSound event');
-      // Resume the audio player...
-    });
+  console.log('trackList', currentTrack);
 
-    return () => {
-      socket.off('playSound');
-      socket.off('pauseSound');
-      socket.off('resumeSound');
-    };
-  }, [socket]);
   useEffect(() => {
     if (currentTrack) {
       setCurrentTrackIndex(
@@ -80,7 +71,6 @@ const AudioPlayer = ({track}) => {
       handlePlay();
     }
   }, [currentTrack]);
-
   const MuteSound = () => {
     if (audioRef.current.volume === 0) {
       audioRef.current.volume = volumeValue;
@@ -258,7 +248,7 @@ const AudioPlayer = ({track}) => {
   }, []);
 
   if (!currentTrack) {
-    return null;
+    return <p>Loading ...</p>;
   }
 
   return (

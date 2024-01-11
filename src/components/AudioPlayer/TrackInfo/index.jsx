@@ -9,7 +9,7 @@ const TrackInfo = ({currentTrack}) => {
       }}>
       <img
         style={{width: '80px', height: '80px'}}
-        src={currentTrack.album.imageUrl || currentTrack.album}
+        src={currentTrack?.album?.imageUrl || currentTrack?.album}
         alt="track"
       />
       <div
