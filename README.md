@@ -29,4 +29,4 @@
 
 - **Écoute de musique en simultané** : Les utilisateurs peuvent écouter des chansons avec d'autres utilisateurs en simultané.
 
-[![Demonstration Video](https://img.icons8.com/fluent/48/000000/video.png)](https://clipchamp.com/watch/yIsxsMsBVta)
+[![Demonstration Video](https://img.icons8.com/fluent/48/000000/video.png)[--> Vidéo WebSocket <--]](https://clipchamp.com/watch/yIsxsMsBVta)
