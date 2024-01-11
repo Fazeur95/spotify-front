@@ -8,7 +8,7 @@ export const AudioPlayerProvider = ({children}) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:8083', {
+    const newSocket = io('https://spotify-websocket.onrender.com', {
       transports: ['websocket'],
       upgrade: false,
     });
