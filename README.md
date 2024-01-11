@@ -28,3 +28,5 @@
 ## Fonctionnalités ajoutées
 
 - **Écoute de musique en simultané** : Les utilisateurs peuvent écouter des chansons avec d'autres utilisateurs en simultané.
+
+![Demonstration Video](https://clipchamp.com/watch/yIsxsMsBVta)
