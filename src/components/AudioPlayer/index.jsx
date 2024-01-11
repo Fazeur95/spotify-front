@@ -290,7 +290,6 @@ const AudioPlayer = ({track}) => {
       <Column>
         <VolumeControlDiv>
           <StyledLink
-            to={`/track/${currentTrack._id}`}
             onClick={() => {
               socket.emit('playSound', currentTrack);
             }}>
